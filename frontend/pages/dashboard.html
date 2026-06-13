@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SmartBank — Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/global.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="app-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">S</div>
+      <div class="logo-text-wrap">
+        <strong>SmartBank</strong>
+        <small>Intelligent Banking</small>
+      </div>
+    </div>
+    <div class="sidebar-section-label">Main</div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-tab="overview" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </a>
+      <a class="nav-item" data-tab="transfer" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
+        Transfer Money
+      </a>
+      <a class="nav-item" data-tab="transactions" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Transactions
+      </a>
+      <a class="nav-item" data-tab="analytics" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg>
+        Analytics
+      </a>
+      <div class="sidebar-section-label">Security</div>
+      <a class="nav-item" data-tab="security" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Security Center
+        <span class="nav-badge" id="alertBadge" style="display:none">!</span>
+      </a>
+      <a class="nav-item" data-tab="fraud" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Fraud Alerts
+      </a>
+      <div class="sidebar-section-label">Account</div>
+      <a class="nav-item" data-tab="rewards" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Rewards
+      </a>
+      <a class="nav-item" data-tab="profile" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-chip" id="userChip">
+        <div class="user-avatar" id="sidebarAvatar">A</div>
+        <div class="user-chip-info">
+          <strong id="sidebarName">Loading...</strong>
+          <small id="sidebarTier">Silver Member</small>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger-btn" id="sidebarToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="page-title" id="pageTitle">Overview</span>
+      </div>
+      <div class="topbar-right">
+        <div class="live-badge"><div class="live-dot"></div>FRAUD SHIELD ACTIVE</div>
+        <span style="font-size:11px;color:var(--text3)" id="topbarGreeting"></span>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ══════ OVERVIEW TAB ══════ -->
+      <div class="tab-pane active" id="tab-overview">
+        <!-- Balance Hero -->
+        <div class="balance-hero">
+          <div class="bh-label">Total Balance</div>
+          <div class="bh-amount"><span class="bh-currency">₹</span><span id="totalBalance">—</span></div>
+          <div class="bh-accounts">
+            <div class="bh-acc"><small>Savings</small><strong id="savingsBalance">—</strong></div>
+            <div class="bh-acc"><small>Current</small><strong id="currentBalance">—</strong></div>
+            <div class="bh-acc"><small>Reward Points</small><strong id="rewardPoints">—</strong></div>
+            <div class="bh-acc"><small>Risk Level</small><strong id="riskLevelDisplay">—</strong></div>
+          </div>
+          <div class="bh-foot">
+            <span class="bh-acc-num" id="accountNumber">Acc: —</span>
+            <span class="badge" id="tierBadge">Silver</span>
+          </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-grid-4 mb-6">
+          <div class="stat-card teal">
+            <div class="stat-icon teal">💸</div>
+            <div><div class="stat-label">Month Spent</div><div class="stat-value" id="monthSpent">—</div><div class="stat-sub" id="spentChange">vs last month</div></div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon green">💰</div>
+            <div><div class="stat-label">Month Received</div><div class="stat-value" id="monthReceived">—</div><div class="stat-sub">credits this month</div></div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-icon amber">⚠</div>
+            <div><div class="stat-label">Fraud Alerts</div><div class="stat-value" id="fraudAlertCount">—</div><div class="stat-sub">this account</div></div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon red">🛡</div>
+            <div><div class="stat-label">Blocked Txns</div><div class="stat-value" id="blockedCount">—</div><div class="stat-sub">transactions blocked</div></div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions + Quick Actions -->
+        <div class="grid-main-side">
+          <div class="card">
+            <div class="section-hdr">
+              <h4>Recent Transactions</h4>
+              <button class="btn btn-outline" style="padding:6px 14px;font-size:11px" onclick="switchTab('transactions')">View All</button>
+            </div>
+            <div class="tx-table-wrap">
+              <table class="tx-table">
+                <thead><tr><th>Party</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody id="recentTxBody"><tr><td colspan="5"><div class="loading-row"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div class="card mb-4">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Quick Actions</h4>
+              <div class="quick-grid">
+                <div class="quick-btn" onclick="switchTab('transfer')"><div class="qb-icon">↕</div><div class="qb-label">Transfer</div></div>
+                <div class="quick-btn" onclick="switchTab('transactions')"><div class="qb-icon">≡</div><div class="qb-label">History</div></div>
+                <div class="quick-btn" onclick="switchTab('analytics')"><div class="qb-icon">📊</div><div class="qb-label">Analytics</div></div>
+                <div class="quick-btn" onclick="switchTab('security')"><div class="qb-icon">🛡</div><div class="qb-label">Security</div></div>
+              </div>
+            </div>
+            <div class="card">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Risk Profile</h4>
+              <div class="risk-gauge-wrap">
+                <svg class="risk-gauge-svg" viewBox="0 0 200 110">
+                  <defs><linearGradient id="grd" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#22d47e"/>
+                    <stop offset="40%" stop-color="#f5a623"/>
+                    <stop offset="75%" stop-color="#ff7832"/>
+                    <stop offset="100%" stop-color="#f04a6a"/>
+                  </linearGradient></defs>
+                  <path d="M20 100 A80 80 0 0 1 180 100" stroke="var(--surface2)" stroke-width="12" fill="none" stroke-linecap="round"/>
+                  <path id="gaugeFill" d="M20 100 A80 80 0 0 1 180 100" stroke="url(#grd)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251" style="transition:stroke-dashoffset 1.5s ease"/>
+                  <line id="gaugeNeedle" x1="100" y1="100" x2="100" y2="28" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" style="transform-origin:100px 100px;transform:rotate(-90deg);transition:transform 1.5s ease"/>
+                  <circle cx="100" cy="100" r="5" fill="var(--teal)"/>
+                </svg>
+                <div class="risk-score-big" id="riskScoreBig">0</div>
+                <div class="risk-level-label" id="riskLevelBig">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ TRANSFER TAB ══════ -->
+      <div class="tab-pane" id="tab-transfer">
+        <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;max-width:860px">
+          <div class="card card-lg">
+            <h4 class="font-display mb-6" style="font-size:20px;font-weight:400">Fund Transfer</h4>
+            <div class="alert alert-error" id="txError"></div>
+            <div class="alert alert-success" id="txSuccess"></div>
+            <div class="alert alert-warning" id="txWarn"></div>
+            <div class="alert alert-blocked" id="txBlocked">
+              <strong>🚨 Transaction Blocked by Fraud Shield</strong>
+              <div id="txBlockedDetails"></div>
+            </div>
+            <div id="txFraudInfo" style="display:none;margin-bottom:14px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);font-size:11px">
+              <div style="margin-bottom:8px;font-size:12px;font-weight:500;color:var(--text2)">🔍 Fraud Analysis Result</div>
+              <div id="txFraudDetails"></div>
+            </div>
+            <form id="transferForm">
+              <div class="form-group">
+                <label>Recipient Email</label>
+                <input type="email" id="txRecipient" class="form-control" placeholder="recipient@example.com" required/>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="form-group">
+                  <label>Amount (₹)</label>
+                  <input type="number" id="txAmount" class="form-control" placeholder="1000" min="1" required/>
+                </div>
+                <div class="form-group">
+                  <label>Transfer Mode</label>
+                  <select id="txMode" class="form-control">
+                    <option value="IMPS">IMPS — Instant</option>
+                    <option value="NEFT">NEFT — Scheduled</option>
+                    <option value="RTGS">RTGS — Large Value</option>
+                    <option value="UPI">UPI — Quick Pay</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select id="txCategory" class="form-control">
+                  <option value="transfer">Transfer</option>
+                  <option value="payment">Payment</option>
+                  <option value="shopping">Shopping</option>
+                  <option value="food">Food & Dining</option>
+                  <option value="travel">Travel</option>
+                  <option value="utility">Utility Bills</option>
+                  <option value="emi">EMI Payment</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Note (Optional)</label>
+                <input type="text" id="txNote" class="form-control" placeholder="Rent, food, etc." maxlength="200"/>
+              </div>
+              <div style="margin-bottom:18px">
+                <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);cursor:pointer">
+                  <input type="checkbox" id="saveBen" style="accent-color:var(--teal)"/> Save recipient as beneficiary
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full btn-lg" id="txBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Secure Transfer</span>
+              </button>
+            </form>
+          </div>
+          <div>
+            <div class="card mb-4">
+              <h4 class="font-display mb-4" style="font-size:14px;font-weight:400">Transfer Limits</h4>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border)"><span class="text-muted">IMPS</span><strong>₹5,00,000/day</strong></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border)"><span class="text-muted">NEFT</span><strong>₹10,00,000/day</strong></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border)"><span class="text-muted">RTGS</span><strong>₹2,00,000 min</strong></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:8px 0"><span class="text-muted">UPI</span><strong>₹1,00,000/day</strong></div>
+              </div>
+              <div style="margin-top:14px;padding:10px;background:var(--teal-dim);border:1px solid rgba(15,212,200,0.2);border-radius:var(--radius);font-size:11px;color:var(--teal)">
+                🔒 All transfers are analysed by our 24-rule fraud engine before execution.
+              </div>
+            </div>
+            <div class="card">
+              <h4 class="font-display mb-4" style="font-size:14px;font-weight:400">Saved Beneficiaries</h4>
+              <div id="benList" style="display:flex;flex-direction:column;gap:6px">
+                <div class="loading-row" style="padding:16px"><div class="spinner"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ TRANSACTIONS TAB ══════ -->
+      <div class="tab-pane" id="tab-transactions">
+        <div class="section-hdr mb-4">
+          <h4 class="font-display" style="font-weight:400">Transaction History</h4>
+          <div style="display:flex;gap:10px;align-items:center">
+            <input class="search-input" id="txSearch" placeholder="Search transactions..."/>
+            <select class="form-control" id="txFilter" style="width:140px">
+              <option value="">All Types</option>
+              <option value="debit">Debits</option>
+              <option value="credit">Credits</option>
+              <option value="blocked">Blocked</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-chips mb-4" id="categoryChips">
+          <button class="chip active" data-cat="">All</button>
+          <button class="chip" data-cat="transfer">Transfer</button>
+          <button class="chip" data-cat="payment">Payment</button>
+          <button class="chip" data-cat="shopping">Shopping</button>
+          <button class="chip" data-cat="food">Food</button>
+          <button class="chip" data-cat="travel">Travel</button>
+          <button class="chip" data-cat="utility">Utility</button>
+          <button class="chip" data-cat="salary">Salary</button>
+        </div>
+        <div class="card">
+          <div class="tx-table-wrap">
+            <table class="tx-table">
+              <thead><tr><th>Transaction ID</th><th>Party</th><th>Mode</th><th>Amount</th><th>Fraud Score</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="allTxBody"><tr><td colspan="7"><div class="loading-row"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+            </table>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+            <span class="text-muted text-sm" id="txPagination">Showing 0 transactions</span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline" style="padding:6px 14px;font-size:11px" id="txPrevBtn" disabled onclick="changeTxPage(-1)">← Prev</button>
+              <button class="btn btn-outline" style="padding:6px 14px;font-size:11px" id="txNextBtn" disabled onclick="changeTxPage(1)">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ ANALYTICS TAB ══════ -->
+      <div class="tab-pane" id="tab-analytics">
+        <div class="stats-grid-4 mb-6">
+          <div class="stat-card teal"><div class="stat-icon teal">💸</div><div><div class="stat-label">Total Spent</div><div class="stat-value" id="analyticsTotalSpent">—</div><div class="stat-sub" id="analyticsSpentChg">vs last month</div></div></div>
+          <div class="stat-card green"><div class="stat-icon green">💰</div><div><div class="stat-label">Total Received</div><div class="stat-value" id="analyticsTotalRcvd">—</div></div></div>
+          <div class="stat-card amber"><div class="stat-icon amber">📋</div><div><div class="stat-label">Transactions</div><div class="stat-value" id="analyticsTxnCount">—</div><div class="stat-sub">this month</div></div></div>
+          <div class="stat-card purple"><div class="stat-icon purple">🏆</div><div><div class="stat-label">Top Category</div><div class="stat-value" id="analyticsTopCat" style="font-size:16px">—</div></div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">30-Day Spend Trend</h4>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:80px;margin-bottom:8px" id="spendBars">
+              <div class="loading-row" style="padding:16px;width:100%"><div class="spinner"></div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3)"><span>30d ago</span><span>Today</span></div>
+          </div>
+          <div class="card">
+            <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Spending by Category</h4>
+            <div id="categoryBreakdown" style="display:flex;flex-direction:column;gap:10px">
+              <div class="loading-row"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ SECURITY TAB ══════ -->
+      <div class="tab-pane" id="tab-security">
+        <div class="grid-main-side">
+          <div>
+            <div class="card mb-4">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Security Overview</h4>
+              <div class="stats-grid-4" style="grid-template-columns:repeat(2,1fr);gap:12px">
+                <div class="stat-card green" style="padding:14px"><div class="stat-icon green" style="font-size:14px">✓</div><div><div class="stat-label">Protected</div><div class="stat-value" id="secCleanCount">—</div></div></div>
+                <div class="stat-card amber" style="padding:14px"><div class="stat-icon amber" style="font-size:14px">⚑</div><div><div class="stat-label">Flagged</div><div class="stat-value" id="secFlagCount">—</div></div></div>
+                <div class="stat-card red" style="padding:14px"><div class="stat-icon red" style="font-size:14px">🚫</div><div><div class="stat-label">Blocked</div><div class="stat-value" id="secBlockCount">—</div></div></div>
+                <div class="stat-card purple" style="padding:14px"><div class="stat-icon purple" style="font-size:14px">📋</div><div><div class="stat-label">Under Review</div><div class="stat-value" id="secReviewCount">—</div></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Recent Security Alerts</h4>
+              <div id="recentAlertsList"><div class="loading-row"><div class="spinner"></div>Loading...</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="card mb-4">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Your Risk Profile</h4>
+              <div class="risk-gauge-wrap">
+                <svg class="risk-gauge-svg" viewBox="0 0 200 110">
+                  <defs><linearGradient id="grd2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#22d47e"/>
+                    <stop offset="40%" stop-color="#f5a623"/>
+                    <stop offset="75%" stop-color="#ff7832"/>
+                    <stop offset="100%" stop-color="#f04a6a"/>
+                  </linearGradient></defs>
+                  <path d="M20 100 A80 80 0 0 1 180 100" stroke="var(--surface2)" stroke-width="12" fill="none" stroke-linecap="round"/>
+                  <path id="secGaugeFill" d="M20 100 A80 80 0 0 1 180 100" stroke="url(#grd2)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251" style="transition:stroke-dashoffset 1.5s ease"/>
+                  <line id="secGaugeNeedle" x1="100" y1="100" x2="100" y2="28" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" style="transform-origin:100px 100px;transform:rotate(-90deg);transition:transform 1.5s ease"/>
+                  <circle cx="100" cy="100" r="5" fill="var(--teal)"/>
+                </svg>
+                <div class="risk-score-big" id="secRiskScore">0</div>
+                <div class="risk-level-label" id="secRiskLabel">Loading...</div>
+              </div>
+              <div style="margin-top:12px;font-size:11px;color:var(--text3);text-align:center;line-height:1.6">Score is a rolling average<br/>of recent transaction risks.</div>
+            </div>
+            <div class="card">
+              <h4 class="font-display mb-4" style="font-size:14px;font-weight:400">Security Tips</h4>
+              <div style="display:flex;flex-direction:column;gap:10px;font-size:12px;color:var(--text2)">
+                <div style="display:flex;gap:10px"><span style="color:var(--teal)">🔐</span><span>Never share your OTP or password with anyone</span></div>
+                <div style="display:flex;gap:10px"><span style="color:var(--teal)">📱</span><span>Verify recipient details before every transfer</span></div>
+                <div style="display:flex;gap:10px"><span style="color:var(--teal)">⏰</span><span>Large night-time transfers trigger higher scrutiny</span></div>
+                <div style="display:flex;gap:10px"><span style="color:var(--teal)">🔁</span><span>Rapid multiple transfers may get auto-blocked</span></div>
+                <div style="display:flex;gap:10px"><span style="color:var(--teal)">📊</span><span>Check your security alerts regularly</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ FRAUD ALERTS TAB ══════ -->
+      <div class="tab-pane" id="tab-fraud">
+        <div class="section-hdr mb-4">
+          <h4 class="font-display" style="font-weight:400">Fraud Alert Log</h4>
+          <div class="filter-chips">
+            <button class="chip active" data-level="">All</button>
+            <button class="chip danger" data-level="critical">Critical</button>
+            <button class="chip danger" data-level="high">High</button>
+            <button class="chip warn" data-level="medium">Medium</button>
+            <button class="chip" data-level="low">Low</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tx-table-wrap">
+            <table class="tx-table">
+              <thead><tr><th>Alert ID</th><th>Date</th><th>Amount</th><th>Risk Score</th><th>Level</th><th>Action</th><th>Rules Triggered</th><th>Status</th></tr></thead>
+              <tbody id="fraudAlertsBody"><tr><td colspan="8"><div class="loading-row"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- HOW IT WORKS -->
+        <div class="card mt-4">
+          <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">How the Fraud Engine Works</h4>
+          <div class="grid-2" style="gap:12px">
+            <div style="display:flex;gap:14px;padding:14px;background:var(--bg2);border-radius:var(--radius)">
+              <div style="font-family:var(--font-display);font-size:32px;color:var(--teal);opacity:0.5;line-height:1;flex-shrink:0">01</div>
+              <div><strong style="display:block;margin-bottom:4px;font-size:12px">Transaction Submitted</strong><p style="font-size:11px;color:var(--text3)">Every transfer triggers the 24-rule scoring engine before money moves.</p></div>
+            </div>
+            <div style="display:flex;gap:14px;padding:14px;background:var(--bg2);border-radius:var(--radius)">
+              <div style="font-family:var(--font-display);font-size:32px;color:var(--teal);opacity:0.5;line-height:1;flex-shrink:0">02</div>
+              <div><strong style="display:block;margin-bottom:4px;font-size:12px">Risk Score Calculated</strong><p style="font-size:11px;color:var(--text3)">Rules check amount, velocity, time, account age, device, behavior patterns.</p></div>
+            </div>
+            <div style="display:flex;gap:14px;padding:14px;background:var(--bg2);border-radius:var(--radius)">
+              <div style="font-family:var(--font-display);font-size:32px;color:var(--teal);opacity:0.5;line-height:1;flex-shrink:0">03</div>
+              <div><strong style="display:block;margin-bottom:4px;font-size:12px">Decision Made</strong><p style="font-size:11px;color:var(--text3)">0–24: Allow · 25–49: Flag · 50–74: Review · 75–89: Warn · 90+: Block</p></div>
+            </div>
+            <div style="display:flex;gap:14px;padding:14px;background:var(--bg2);border-radius:var(--radius)">
+              <div style="font-family:var(--font-display);font-size:32px;color:var(--teal);opacity:0.5;line-height:1;flex-shrink:0">04</div>
+              <div><strong style="display:block;margin-bottom:4px;font-size:12px">Alert Logged</strong><p style="font-size:11px;color:var(--text3)">All medium+ risk events are stored here for review and audit purposes.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ REWARDS TAB ══════ -->
+      <div class="tab-pane" id="tab-rewards">
+        <div class="grid-main-side">
+          <div class="card card-lg" style="text-align:center">
+            <div style="font-size:14px;color:var(--text3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Your Reward Points</div>
+            <div style="font-family:var(--font-display);font-size:72px;font-weight:300;color:var(--teal);line-height:1;margin-bottom:6px" id="rewardPointsBig">—</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:28px">1 point = ₹0.10 value</div>
+            <button class="btn btn-primary btn-lg" style="margin:0 auto">Redeem Points →</button>
+            <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+              <div style="font-size:11px;color:var(--text3);margin-bottom:12px">How to earn more:</div>
+              <div style="font-size:12px;color:var(--text2);line-height:2">1 point per ₹100 transferred · Bonus on bill payments · Tier upgrade bonuses</div>
+            </div>
+          </div>
+          <div>
+            <div class="card mb-4">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Member Tier</h4>
+              <div id="tierDisplay"></div>
+            </div>
+            <div class="card">
+              <h4 class="font-display mb-4" style="font-size:15px;font-weight:400">Redeem Catalog</h4>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg2);border-radius:var(--radius);font-size:12px"><span>✈ Travel Miles</span><span class="text-teal">500 pts → ₹50</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg2);border-radius:var(--radius);font-size:12px"><span>💳 Cashback</span><span class="text-teal">250 pts → ₹25</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg2);border-radius:var(--radius);font-size:12px"><span>🛒 Shopping</span><span class="text-teal">100 pts → ₹10</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg2);border-radius:var(--radius);font-size:12px"><span>⭐ Tier Upgrade</span><span class="text-teal">5000 pts</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════ PROFILE TAB ══════ -->
+      <div class="tab-pane" id="tab-profile">
+        <div class="grid-main-side">
+          <div class="card card-lg">
+            <h4 class="font-display mb-6" style="font-size:18px;font-weight:400">Account Details</h4>
+            <div id="profileError" class="alert alert-error"></div>
+            <div id="profileSuccess" class="alert alert-success"></div>
+            <div class="form-row-2">
+              <div class="form-group"><label>First Name</label><input type="text" id="pfFirst" class="form-control" readonly/></div>
+              <div class="form-group"><label>Last Name</label><input type="text" id="pfLast" class="form-control" readonly/></div>
+            </div>
+            <div class="form-group"><label>Email Address</label><input type="email" id="pfEmail" class="form-control" readonly/></div>
+            <div class="form-group"><label>Phone</label><input type="tel" id="pfPhone" class="form-control" readonly/></div>
+            <div class="form-row-2">
+              <div class="form-group"><label>Account Number</label><input type="text" id="pfAccNum" class="form-control" readonly/></div>
+              <div class="form-group"><label>IFSC Code</label><input type="text" id="pfIfsc" class="form-control" readonly value="SBNK0001234"/></div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>Account Type</label><input type="text" id="pfAccType" class="form-control" readonly/></div>
+              <div class="form-group"><label>Member Since</label><input type="text" id="pfSince" class="form-control" readonly/></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px">
+              <button class="btn btn-primary" id="editProfileBtn" onclick="enableEdit()">Edit Profile</button>
+              <button class="btn btn-success" id="saveProfileBtn" style="display:none" onclick="saveProfile()">Save Changes</button>
+              <button class="btn btn-outline" id="cancelEditBtn" style="display:none" onclick="cancelEdit()">Cancel</button>
+            </div>
+          </div>
+          <div>
+            <div class="card mb-4" style="text-align:center;padding:28px">
+              <div class="user-avatar" style="width:64px;height:64px;font-size:28px;margin:0 auto 14px" id="profileAvatar">A</div>
+              <div style="font-family:var(--font-display);font-size:20px;margin-bottom:4px" id="profileFullName">—</div>
+              <div style="font-size:12px;color:var(--text3);margin-bottom:14px" id="profileEmail2">—</div>
+              <span class="badge" id="profileTierBadge" style="margin:0 auto">Silver</span>
+              <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px"><span class="text-muted">KYC Status</span><span class="text-green" id="kycStatus">—</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px"><span class="text-muted">Account Status</span><span class="text-green">Active</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <h4 class="font-display mb-4" style="font-size:14px;font-weight:400">Change Password</h4>
+              <div id="pwdError" class="alert alert-error"></div>
+              <div id="pwdSuccess" class="alert alert-success"></div>
+              <form id="changePwdForm">
+                <div class="form-group"><label>Current Password</label><input type="password" id="curPwd" class="form-control" placeholder="••••••••"/></div>
+                <div class="form-group"><label>New Password</label><input type="password" id="newPwd" class="form-control" placeholder="Min 8 chars"/></div>
+                <button type="submit" class="btn btn-outline btn-full">Update Password</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-content -->
+  </div><!-- end main-content -->
+</div><!-- end app-layout -->
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/dashboard.js"></script>
+</body>
+</html>

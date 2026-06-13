@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartBank — Intelligent Banking</title>
+  <link rel="stylesheet" href="assets/css/global.css"/>
+  <link rel="stylesheet" href="assets/css/landing.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="noise-overlay"></div>
+  <!-- <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div> -->
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">Smart<span>Bank</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#security" class="nav-link">Security</a></li>
+        <li><a href="#stats" class="nav-link">About</a></li>
+      </ul>
+      <!-- <div class="nav-actions">
+        <a href="pages/login.html" class="btn btn-ghost">Sign In</a>
+        <a href="pages/register.html" class="btn btn-primary">Open Account</a>
+      </div> -->
+      <div class="nav-actions">
+  <a href="pages/login.html" class="btn btn-ghost">Sign In</a>
+  <a href="pages/admin-login.html" class="btn btn-ghost">Admin</a>
+  <a href="pages/register.html" class="btn btn-primary">Open Account</a>
+</div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-container">
+      <div class="hero-left">
+        <div class="hero-chip">
+          <span class="chip-dot"></span>
+          Advanced Fraud Detection · AI-Powered Security
+        </div>
+        <h1 class="hero-title">
+          Banking that<br/>
+          <em>thinks</em> before<br/>
+          it acts.
+        </h1>
+        <p class="hero-desc">
+          SmartBank combines core banking with intelligent fraud detection, 
+          real-time analytics, and behavioral AI — protecting every rupee, every second.
+        </p>
+        <div class="hero-actions">
+          <a href="pages/register.html" class="btn btn-primary btn-lg">
+            <span>Start for Free</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#features" class="btn btn-outline btn-lg">Explore Features</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item"><span class="trust-num" data-target="500">0</span><span>K+</span><small>Users</small></div>
+          <div class="trust-div"></div>
+          <div class="trust-item"><span class="trust-num" data-target="99">0</span><span>.9%</span><small>Uptime</small></div>
+          <div class="trust-div"></div>
+          <div class="trust-item"><span class="trust-num" data-target="24">0</span><span>/7</span><small>Support</small></div>
+          <div class="trust-div"></div>
+          <div class="trust-item"><span class="trust-num" data-target="256">0</span><span>-bit</span><small>Encryption</small></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card-stack">
+          <!-- Floating Bank Card -->
+          <div class="float-card main-card">
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="card-brand">SmartBank</div>
+                <div class="card-chip-img">
+                  <div class="chip-rect"></div>
+                  <div class="chip-line h"></div>
+                  <div class="chip-line v"></div>
+                </div>
+              </div>
+              <div class="card-number">4829 •••• •••• 7341</div>
+              <div class="card-bottom">
+                <div><small>Card Holder</small><strong>ARJUN MEHTA</strong></div>
+                <div><small>Expires</small><strong>09/28</strong></div>
+                <div class="card-type">VISA</div>
+              </div>
+            </div>
+          </div>
+          <!-- Floating Notification -->
+          <div class="float-notif float-notif-1">
+            <div class="notif-icon green">✓</div>
+            <div class="notif-body">
+              <strong>Transfer Successful</strong>
+              <small>₹25,000 to Priya Sharma</small>
+            </div>
+          </div>
+          <div class="float-notif float-notif-2 danger">
+            <div class="notif-icon red">⚠</div>
+            <div class="notif-body">
+              <strong>Fraud Alert Blocked</strong>
+              <small>Suspicious txn · Score 91/100</small>
+            </div>
+          </div>
+          <!-- Balance Widget -->
+          <div class="float-balance">
+            <small>Total Balance</small>
+            <div class="fbal-amount">₹3,84,290<span>.50</span></div>
+            <div class="fbal-change">↑ 12.4% this month</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-badge">Core Capabilities</div>
+      <h2 class="section-title">Everything you need,<br/><em>nothing you don't.</em></h2>
+      <div class="features-bento">
+        <div class="bento-card bento-large">
+          <div class="bento-icon">🛡</div>
+          <h3>AI Fraud Detection</h3>
+          <p>24 behavioural rules analyze every transaction in real-time. Suspicious activity is scored, flagged, or blocked before money moves.</p>
+          <div class="bento-visual">
+            <div class="mini-score-display">
+              <div class="msd-label">Risk Score</div>
+              <div class="msd-bar-wrap">
+                <div class="msd-bar" style="--w:15%"></div>
+                <span class="msd-val safe">12 — Clean</span>
+              </div>
+              <div class="msd-bar-wrap mt">
+                <div class="msd-bar amber" style="--w:54%"></div>
+                <span class="msd-val warn">54 — Review</span>
+              </div>
+              <div class="msd-bar-wrap mt">
+                <div class="msd-bar danger" style="--w:91%"></div>
+                <span class="msd-val danger">91 — BLOCKED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon">⚡</div>
+          <h3>Instant Transfers</h3>
+          <p>IMPS, NEFT, UPI and internal transfers settle in under 2 seconds with full audit trail.</p>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon">📊</div>
+          <h3>Spend Analytics</h3>
+          <p>Categorized spending insights, monthly trends, and personalized financial reports.</p>
+        </div>
+        <div class="bento-card bento-accent">
+          <div class="bento-icon">🔐</div>
+          <h3>Zero-Trust Security</h3>
+          <p>JWT auth, bcrypt hashing, rate limiting, device fingerprinting and account lockout protection.</p>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon">👤</div>
+          <h3>KYC & Compliance</h3>
+          <p>Full KYC document management, account verification, and audit logging for every action.</p>
+        </div>
+        <div class="bento-card">
+          <div class="bento-icon">🏆</div>
+          <h3>Reward Points</h3>
+          <p>Earn 1 point per ₹100 spent. Tier upgrades from Silver to Diamond based on activity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY SECTION -->
+  <section class="security-section" id="security">
+    <div class="container">
+      <div class="security-grid">
+        <div class="security-left">
+          <div class="section-badge">Fraud Detection Engine</div>
+          <h2 class="section-title text-left">24 Rules.<br/><em>Zero Compromise.</em></h2>
+          <p class="security-desc">Our rules-based engine analyses transaction velocity, behavioral patterns, device fingerprints, and time-based signals to generate a real-time risk score for every transaction.</p>
+          <div class="rule-list">
+            <div class="rule-item"><span class="rule-dot critical"></span><div><strong>Critical Amount Threshold</strong><small>₹5,00,000+ instantly flagged</small></div></div>
+            <div class="rule-item"><span class="rule-dot high"></span><div><strong>Rapid-Fire Velocity</strong><small>3+ transfers in 10 minutes = block</small></div></div>
+            <div class="rule-item"><span class="rule-dot medium"></span><div><strong>Behavioral Anomaly</strong><small>3× above user's average amount</small></div></div>
+            <div class="rule-item"><span class="rule-dot low"></span><div><strong>Off-Hours Detection</strong><small>11PM–5AM transfers flagged</small></div></div>
+            <div class="rule-item"><span class="rule-dot medium"></span><div><strong>Structuring Detection</strong><small>Sequential similar amounts (smurfing)</small></div></div>
+            <div class="rule-item"><span class="rule-dot high"></span><div><strong>Balance Drain Alert</strong><small>Transfer drains >70% of balance</small></div></div>
+          </div>
+        </div>
+        <div class="security-right">
+          <div class="security-terminal">
+            <div class="term-header">
+              <div class="term-dots"><span></span><span></span><span></span></div>
+              <span class="term-title">fraud-engine.log</span>
+            </div>
+            <div class="term-body" id="terminalLog">
+              <div class="term-line"><span class="tl-time">10:42:31</span> <span class="tl-info">ANALYSE</span> Transaction ₹85,000 → arjun@demo.com</div>
+              <div class="term-line"><span class="tl-time">10:42:31</span> <span class="tl-warn">R003</span> Large amount exceeds ₹50K threshold → +12pts</div>
+              <div class="term-line"><span class="tl-time">10:42:31</span> <span class="tl-warn">R015</span> Behavioral anomaly: 3.2× user avg → +20pts</div>
+              <div class="term-line"><span class="tl-time">10:42:31</span> <span class="tl-warn">R013</span> First-time recipient detected → +8pts</div>
+              <div class="term-line"><span class="tl-time">10:42:31</span> <span class="tl-info">SCORE</span> Total risk score: <span class="tl-score warn">54/100</span></div>
+              <div class="term-line"><span class="tl-time">10:42:31</span> <span class="tl-action warn">ACTION</span> Status: REVIEW — Transaction flagged</div>
+              <div class="term-line blink-cursor"><span class="tl-time">10:42:32</span> <span class="tl-info">AWAIT</span> Next transaction...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section" id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-big"><div class="stat-n" data-target="20">0</div><div class="stat-u">M+</div><small>Transactions Secured</small></div>
+        <div class="stat-big"><div class="stat-n" data-target="99">0</div><div class="stat-u">.7%</div><small>Fraud Blocked</small></div>
+        <div class="stat-big"><div class="stat-n" data-target="2">0</div><div class="stat-u">ms</div><small>Avg Detection Time</small></div>
+        <div class="stat-big"><div class="stat-n" data-target="24">0</div><div class="stat-u"></div><small>Active Fraud Rules</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box">
+        <div class="cta-glow"></div>
+        <h2>Ready to bank<br/><em>smarter?</em></h2>
+        <p>Join thousands of users protected by SmartBank's intelligent fraud detection engine.</p>
+        <div class="cta-actions">
+          <a href="pages/register.html" class="btn btn-primary btn-lg">Open Your Account →</a>
+          <a href="pages/login.html" class="btn btn-outline btn-lg">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-brand">Smart<span>Bank</span></div>
+          <p>A full-stack intelligent banking system with advanced fraud detection — Semester Project 2025.</p>
+          <div class="footer-badges">
+            <span class="fbadge">RBI Regulated (Demo)</span>
+            <span class="fbadge">DICGC Insured (Demo)</span>
+          </div>
+        </div>
+        <div class="footer-links-group">
+          <strong>Product</strong>
+          <a>Features</a><a>Security</a><a>Pricing</a><a>API Docs</a>
+        </div>
+        <div class="footer-links-group">
+          <strong>Technology</strong>
+          <a>Node.js Backend</a><a>MongoDB Database</a><a>JWT Auth</a><a>Fraud Engine</a>
+        </div>
+        <div class="footer-links-group">
+          <strong>Account</strong>
+          <a href="pages/register.html">Register</a>
+          <a href="pages/login.html">Login</a>
+          <a href="pages/dashboard.html">Dashboard</a>
+          <a href="pages/security.html">Security Center</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 SmartBank · Semester Project · Built with Node.js, Express, MongoDB & Vanilla JS</p>
+        <p>Designed for academic demonstration purposes only.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- <script src="assets/js/landing.js"></script> -->
+</body>
+</html>

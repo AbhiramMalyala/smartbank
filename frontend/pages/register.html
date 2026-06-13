@@ -1,0 +1,268 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SmartBank — Open Account</title>
+  <link rel="stylesheet" href="../assets/css/global.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="auth-page">
+  <div class="auth-panel-left">
+    <a href="../index.html" class="auth-brand-logo">Smart<span>Bank</span></a>
+    <h1 class="auth-headline">Join the<br/><em>future</em><br/>of banking.</h1>
+    <p class="auth-sub-text">Open your account in under 2 minutes. No fees, no paperwork — just intelligent banking from day one.</p>
+    <div class="auth-features-list">
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>₹50,000 starting balance (demo)</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>Instant virtual card on signup</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>500 reward points on registration</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>AI-powered fraud shield activated immediately</span></div>
+    </div>
+  </div>
+
+  <div class="auth-panel-right" style="overflow-y:auto;padding:32px 40px">
+    <div class="auth-form-box" style="max-width:380px;padding:10px 0">
+      <h2>Create Account</h2>
+      <p class="auth-form-sub">Your smart banking journey starts here</p>
+
+      <div class="alert alert-error" id="regError"></div>
+      <div class="alert alert-success" id="regSuccess"></div>
+
+      <form id="registerForm">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="regFirst" class="form-control" placeholder="Arjun" required/>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="regLast" class="form-control" placeholder="Mehta" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="regEmail" class="form-control" placeholder="you@example.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="regPhone" class="form-control" placeholder="+91 98765 43210"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="regPassword" class="form-control" placeholder="Min 8 chars, uppercase + number" required/>
+            <button type="button" class="pass-eye" onclick="togglePass('regPassword',this)">👁</button>
+          </div>
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px" id="strengthText"></div>
+        </div>
+        <div class="form-group">
+          <label>Account Type</label>
+          <select id="regAccType" class="form-control">
+            <option value="savings">Savings Account</option>
+            <option value="current">Current Account</option>
+            <option value="premium">Premium Account</option>
+          </select>
+        </div>
+        <div style="margin-bottom:18px">
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text3);cursor:pointer">
+            <input type="checkbox" id="termsCheck" style="accent-color:var(--teal);margin-top:2px" required/>
+            <span>I agree to the <a style="color:var(--teal)">Terms of Service</a> and <a style="color:var(--teal)">Privacy Policy</a></span>
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="regBtn">
+          <span>Open My Account</span>
+        </button>
+      </form>
+
+      <p class="auth-switch">Already a member? <a href="login.html">Sign in →</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/auth.js"></script>
+<script>
+function togglePass(id,btn){
+  const el=document.getElementById(id);
+  el.type=el.type==='password'?'text':'password';
+  btn.textContent=el.type==='password'?'👁':'🙈';
+}
+document.getElementById('regPassword').addEventListener('input',function(){
+  const v=this.value,fill=document.getElementById('strengthFill'),txt=document.getElementById('strengthText');
+  let s=0;
+  if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;
+  const colors=['','#f04a6a','#f5a623','#0fd4c8','#22d47e'];
+  const labels=['','Weak — add uppercase & numbers','Fair — add a symbol','Good','Strong ✓'];
+  fill.style.width=(s*25)+'%';fill.style.background=colors[s];
+  txt.textContent=v.length?labels[s]:'';txt.style.color=colors[s];
+});
+const cur=document.getElementById('cursor'),dot=document.getElementById('cursorDot');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});
+</script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SmartBank — Open Account</title>
+  <link rel="stylesheet" href="../assets/css/global.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <!-- auth.js loaded BEFORE body so DOMContentLoaded fires correctly -->
+  <script src="../assets/js/auth.js" defer></script>
+  <style>
+    /* Make error/success alerts always visible when .show is added */
+    .alert { line-height: 1.7; }
+    .alert code { background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+  </style>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="auth-page">
+  <!-- LEFT PANEL -->
+  <div class="auth-panel-left">
+    <a href="../index.html" class="auth-brand-logo">Smart<span>Bank</span></a>
+    <h1 class="auth-headline">Join the<br/><em>future</em><br/>of banking.</h1>
+    <p class="auth-sub-text">Open your account in under 2 minutes. No fees, no paperwork — just intelligent banking from day one.</p>
+    <div class="auth-features-list">
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>₹50,000 starting balance (demo)</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>Instant virtual card on signup</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>500 reward points on registration</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>AI-powered fraud shield activated immediately</span></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-panel-right" style="overflow-y:auto;padding:32px 40px">
+    <div class="auth-form-box" style="max-width:390px;padding:10px 0">
+      <h2>Create Account</h2>
+      <p class="auth-form-sub">Your smart banking journey starts here</p>
+
+      <!-- Alerts — shown/hidden by JS -->
+      <div class="alert alert-error"   id="regError"></div>
+      <div class="alert alert-success" id="regSuccess"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" id="regFirst" class="form-control" placeholder="Arjun" autocomplete="given-name"/>
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" id="regLast" class="form-control" placeholder="Mehta" autocomplete="family-name"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="regEmail" class="form-control" placeholder="you@example.com" autocomplete="email"/>
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="regPhone" class="form-control" placeholder="+91 98765 43210" autocomplete="tel"/>
+        </div>
+
+        <div class="form-group">
+          <label>Password * <span style="color:var(--text3);font-size:10px">(Min 8 chars, 1 uppercase, 1 number)</span></label>
+          <div class="pass-wrap">
+            <input type="password" id="regPassword" class="form-control" placeholder="e.g. MyBank@123" autocomplete="new-password"/>
+            <button type="button" class="pass-eye" id="passToggleBtn">👁</button>
+          </div>
+          <div class="strength-bar" style="margin-top:6px">
+            <div class="strength-fill" id="strengthFill"></div>
+          </div>
+          <div id="strengthText" style="font-size:10px;color:var(--text3);margin-top:4px"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Account Type</label>
+          <select id="regAccType" class="form-control">
+            <option value="savings">Savings Account</option>
+            <option value="current">Current Account</option>
+            <option value="premium">Premium Account</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <label style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--text3);cursor:pointer;line-height:1.6">
+            <input type="checkbox" id="termsCheck" style="accent-color:var(--teal);margin-top:3px;flex-shrink:0"/>
+            <span>I agree to the <a href="#" style="color:var(--teal)">Terms of Service</a> and <a href="#" style="color:var(--teal)">Privacy Policy</a></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="regBtn">
+          <span>Open My Account</span>
+        </button>
+      </form>
+
+      <p class="auth-switch">Already a member? <a href="login.html">Sign in →</a></p>
+
+      <!-- Quick test hint -->
+      <div style="margin-top:20px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text3)">
+        <strong style="color:var(--text2);display:block;margin-bottom:4px">Password must include:</strong>
+        <div id="pwdHintLen"   style="margin:2px 0">✗ At least 8 characters</div>
+        <div id="pwdHintUp"    style="margin:2px 0">✗ One uppercase letter (A–Z)</div>
+        <div id="pwdHintLow"   style="margin:2px 0">✗ One lowercase letter (a–z)</div>
+        <div id="pwdHintNum"   style="margin:2px 0">✗ One number (0–9)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Password visibility toggle
+document.getElementById('passToggleBtn').addEventListener('click', function () {
+  const inp = document.getElementById('regPassword');
+  inp.type  = inp.type === 'password' ? 'text' : 'password';
+  this.textContent = inp.type === 'password' ? '👁' : '🙈';
+});
+
+// Live password strength checker
+document.getElementById('regPassword').addEventListener('input', function () {
+  const v    = this.value;
+  const fill = document.getElementById('strengthFill');
+  const txt  = document.getElementById('strengthText');
+
+  const hasLen = v.length >= 8;
+  const hasUp  = /[A-Z]/.test(v);
+  const hasLow = /[a-z]/.test(v);
+  const hasNum = /[0-9]/.test(v);
+  const hasSym = /[^A-Za-z0-9]/.test(v);
+
+  // Update hint checklist
+  const tick = ok => ok ? '✓' : '✗';
+  const col  = ok => ok ? 'var(--green)' : 'var(--text3)';
+  const h = (id, ok) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.color = col(ok);
+    el.textContent = el.textContent.replace(/^[✓✗] /, tick(ok) + ' ');
+  };
+  h('pwdHintLen', hasLen);
+  h('pwdHintUp',  hasUp);
+  h('pwdHintLow', hasLow);
+  h('pwdHintNum', hasNum);
+
+  let score = [hasLen, hasUp, hasLow, hasNum, hasSym].filter(Boolean).length;
+  const colors = ['', '#f04a6a', '#f5a623', '#0fd4c8', '#22d47e', '#22d47e'];
+  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong ✓', 'Very Strong ✓'];
+  if (v.length === 0) { fill.style.width = '0'; txt.textContent = ''; return; }
+  fill.style.width      = (score * 20) + '%';
+  fill.style.background = colors[score] || colors[4];
+  txt.textContent       = labels[score] || '';
+  txt.style.color       = colors[score] || colors[4];
+});
+</script>
+</body>
+</html>
