@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SmartBank — Admin Login</title>
+  <link rel="stylesheet" href="../assets/css/global.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="../assets/js/auth.js" defer></script>
+  <style>
+    .alert { line-height: 1.7; }
+    .alert code { background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;font-size:11px; }
+    .demo-fill-btn { background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 8px;color:var(--teal);font-family:var(--font-mono);font-size:10px;cursor:pointer;transition:all 0.2s;text-align:left;width:100%; }
+    .demo-fill-btn:hover { background:var(--teal-dim);border-color:rgba(15,212,200,0.3); }
+  </style>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="auth-page">
+  <!-- LEFT PANEL -->
+  <div class="auth-panel-left">
+    <a href="../index.html" class="auth-brand-logo">Smart<span>Bank</span></a>
+    <h1 class="auth-headline">Welcome<br/><em>back.</em></h1>
+    <p class="auth-sub-text">Your financial intelligence hub — protected by 24-rule fraud detection and zero-trust security architecture.</p>
+    <div class="auth-features-list">
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>Real-time fraud scoring on every transaction</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>JWT-secured sessions with device tracking</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>Instant transfer across IMPS, NEFT &amp; UPI</span></div>
+      <div class="auth-feat"><div class="auth-feat-dot"></div><span>Behavioral analytics and spend insights</span></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="auth-panel-right">
+    <div class="auth-form-box">
+        <div style="margin-bottom:20px;">
+    <a href="../index.html"
+       style="
+         color:#0fd4c8;
+         text-decoration:none;
+         font-size:14px;
+       ">
+       ← Back to Home
+    </a>
+  </div>
+
+  <h2>Admin Login</h2>
+  <p class="auth-form-sub">Administrator access only</p>
+      <div class="alert alert-error"   id="loginError"></div>
+      <div class="alert alert-warning" id="loginWarn"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="you@example.com" autocomplete="email"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" autocomplete="current-password"/>
+            <button type="button" class="pass-eye" id="loginPassToggle">👁</button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text3);cursor:pointer">
+            <input type="checkbox" id="rememberMe" style="accent-color:var(--teal)"/> Remember me
+          </label>
+          <a href="#" style="font-size:12px;color:var(--teal)">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="loginBtn">
+          <span>Sign In</span>
+        </button>
+      </form>
+
+      <!-- Demo accounts -->
+      <div style="margin-top:18px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius)">
+        <strong style="color:var(--text2);display:block;margin-bottom:8px;font-size:11px">Demo Accounts (click to fill)</strong>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+          <button class="demo-fill-btn" onclick="fillDemo('arjun@demo.com')">arjun@demo.com</button>
+          <button class="demo-fill-btn" onclick="fillDemo('priya@demo.com')">priya@demo.com</button>
+          <button class="demo-fill-btn" onclick="fillDemo('rajan@demo.com')">rajan@demo.com</button>
+          <button class="demo-fill-btn" onclick="fillDemo('sneha@demo.com')">sneha@demo.com</button>
+        </div>
+        <div style="margin-top:6px;color:var(--text4);font-size:10px">All demo passwords: <strong style="color:var(--text3)">Demo@1234</strong></div>
+      </div>
+
+      <p class="auth-switch">No account? <a href="register.html">Open for free →</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillDemo(email) {
+  document.getElementById('loginEmail').value    = email;
+  document.getElementById('loginPassword').value = 'Demo@1234';
+}
+document.getElementById('loginPassToggle').addEventListener('click', function () {
+  const inp = document.getElementById('loginPassword');
+  inp.type  = inp.type === 'password' ? 'text' : 'password';
+  this.textContent = inp.type === 'password' ? '👁' : '🙈';
+});
+</script>
+</body>
+</html>

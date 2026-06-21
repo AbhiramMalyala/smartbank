@@ -16,6 +16,7 @@
 const Transaction = require('../models/Transaction');
 const FraudAlert  = require('../models/FraudAlert');
 const User        = require('../models/User');
+const { predictFraud } = require('../ml/predict');
 
 // ── Configurable Thresholds ───────────────────────────────────────────────────
 const T = {
@@ -117,6 +118,15 @@ async function analyse(ctx) {
   const dailyVolume   = dailyVolRes[0]?.total || 0;
   const accountAgeDays= (now - new Date(sender.createdAt)) / (1000 * 60 * 60 * 24);
   const totalBalance  = (sender.savingsBalance || 0) + (sender.currentBalance || 0);
+const mlResult = predictFraud({
+amount,
+hour,
+dailyTxnCount: dailyCount,
+dailyVolume,
+accountAgeDays: Math.floor(accountAgeDays),
+userRiskScore: sender.riskScore || 0,
+isNewRecipient: prevToRecipient === 0 ? 1 : 0
+});
 
   // ── R019: Frozen account ─────────────────────────────────────────────────
   if (sender.isFrozen) {
@@ -231,7 +241,13 @@ async function analyse(ctx) {
   }
 
   // ── Cap & classify ────────────────────────────────────────────────────────
-  score = Math.min(Math.round(score), 100);
+  // score = Math.min(Math.round(score), 100);
+const finalScore = Math.round(
+(score * 0.7) +
+(mlResult.mlScore * 0.3)
+);
+
+score = Math.min(finalScore, 100);
 
   let level, action;
   if      (score >= 90) { level = 'critical'; action = 'block';  }
@@ -248,6 +264,8 @@ async function analyse(ctx) {
     shouldReview:   action === 'review',
     triggeredRules: triggered,
     flags:          triggered.map(r => r.description),
+    mlFraudScore: mlResult.mlScore,
+mlPrediction: mlResult.prediction === 1 ? 'fraud' : 'legitimate',
     context: {
       amount, recipientEmail, transferMode,
       hour, dayOfWeek: dow,

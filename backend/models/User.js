@@ -6,6 +6,11 @@ const userSchema = new mongoose.Schema({
   firstName:    { type: String, required: true, trim: true },
   lastName:     { type: String, trim: true, default: '' },
   email:        { type: String, required: true, unique: true, lowercase: true, trim: true },
+  role: {
+  type: String,
+  enum: ['user', 'admin'],
+  default: 'user'
+},
   phone:        { type: String, trim: true, default: '' },
   password:     { type: String, required: true, minlength: 8 },
 
@@ -37,6 +42,21 @@ const userSchema = new mongoose.Schema({
   avgTransactionAmt: { type: Number, default: 0 },
   totalTransactions: { type: Number, default: 0 },
   blockedRecipients: [String],
+  fraudPredictions: {
+  totalChecked: { type: Number, default: 0 },
+  fraudDetected: { type: Number, default: 0 }
+},
+
+mlFraudScore: {
+  type: Number,
+  default: 0,
+  min: 0,
+  max: 100
+},
+
+lastFraudCheck: {
+  type: Date
+},
 
 }, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 

@@ -165,8 +165,16 @@ router.post('/transfer', protect, [
         counterpartyName: `${recipient.firstName} ${recipient.lastName}`.trim(),
         counterpartyEmail: recipientEmail, counterpartyId: recipient._id,
         transferMode, note, status: 'blocked',
-        fraudScore: fraudResult.riskScore, fraudLevel: fraudResult.riskLevel,
-        fraudFlags: fraudResult.flags,
+        // fraudScore: fraudResult.riskScore, fraudLevel: fraudResult.riskLevel,
+        // fraudFlags: fraudResult.flags,
+        fraudScore: fraudResult.riskScore,
+fraudLevel: fraudResult.riskLevel,
+fraudFlags: fraudResult.flags,
+
+mlFraudScore: fraudResult.mlFraudScore || 0,
+mlPrediction: fraudResult.mlPrediction || 'legitimate',
+finalRiskScore: fraudResult.riskScore,
+
         ipAddress: req.clientIP, userAgent: req.headers['user-agent'],
         channel: 'web', completedAt: new Date(),
       });
@@ -211,9 +219,19 @@ router.post('/transfer', protect, [
         counterpartyName: `${recipient.firstName} ${recipient.lastName}`.trim(),
         counterpartyEmail: recipientEmail, counterpartyId: recipient._id,
         transferMode, note, status: txStatus,
+        // fraudScore: fraudResult.riskScore,
+        // fraudLevel: fraudResult.riskLevel === 'clean' ? 'clean' : fraudResult.riskLevel,
+        // fraudFlags: fraudResult.flags,
         fraudScore: fraudResult.riskScore,
-        fraudLevel: fraudResult.riskLevel === 'clean' ? 'clean' : fraudResult.riskLevel,
-        fraudFlags: fraudResult.flags,
+fraudLevel: fraudResult.riskLevel === 'clean'
+? 'clean'
+: fraudResult.riskLevel,
+fraudFlags: fraudResult.flags,
+
+mlFraudScore: fraudResult.mlFraudScore || 0,
+mlPrediction: fraudResult.mlPrediction || 'legitimate',
+finalRiskScore: fraudResult.riskScore,
+
         ipAddress: req.clientIP, userAgent: req.headers['user-agent'],
         channel: 'web', completedAt: new Date(),
         reference: 'REF' + Date.now(),
@@ -255,11 +273,15 @@ router.post('/transfer', protect, [
       newBalance: sender.savingsBalance,
       rewardPointsEarned: Math.floor(numAmt / 100),
       fraud: {
-        score:          fraudResult.riskScore,
-        level:          fraudResult.riskLevel,
-        flagged:        fraudResult.riskLevel !== 'clean',
-        rulesTriggered: fraudResult.triggeredRules.length,
-      },
+score: fraudResult.riskScore,
+level: fraudResult.riskLevel,
+flagged: fraudResult.riskLevel !== 'clean',
+rulesTriggered: fraudResult.triggeredRules.length,
+
+mlScore: fraudResult.mlFraudScore,
+mlPrediction: fraudResult.mlPrediction
+},
+
     };
     if (fraudResult.shouldReview)
       resp.warning = '⚠️ Transaction flagged for security review.';

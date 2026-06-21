@@ -40,10 +40,15 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ── API Routes ────────────────────────────────────────────────────────────────
+// app.use('/api/auth',         require('./routes/auth'));
+// app.use('/api/transactions', require('./routes/transactions'));
+// app.use('/api/fraud',        require('./routes/fraud'));
+// app.use('/api/user',         require('./routes/user'));
 app.use('/api/auth',         require('./routes/auth'));
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/fraud',        require('./routes/fraud'));
 app.use('/api/user',         require('./routes/user'));
+app.use('/api/admin',        require('./routes/admin'));
 
 // ── Health Check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

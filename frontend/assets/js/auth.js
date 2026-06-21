@@ -1,121 +1,5 @@
-// // assets/js/auth.js
-// const API = 'http://localhost:5000/api';
-
-// // Cursor
-// document.addEventListener('DOMContentLoaded', () => {
-//   const cur = document.getElementById('cursor');
-//   const dot = document.getElementById('cursorDot');
-//   if (cur) {
-//     document.addEventListener('mousemove', e => {
-//       cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-//       dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-//     });
-//     document.querySelectorAll('a,button').forEach(el => {
-//       el.addEventListener('mouseenter', () => cur.style.transform = 'translate(-50%,-50%) scale(1.5)');
-//       el.addEventListener('mouseleave', () => cur.style.transform = 'translate(-50%,-50%) scale(1)');
-//     });
-//   }
-// });
-
-// function showErr(id, msg) {
-//   const el = document.getElementById(id);
-//   if (!el) return;
-//   el.textContent = msg; el.classList.add('show');
-//   setTimeout(() => el.classList.remove('show'), 7000);
-// }
-// function showSuc(id, msg) {
-//   const el = document.getElementById(id);
-//   if (!el) return;
-//   el.textContent = msg; el.classList.add('show');
-// }
-// function setBtn(id, text, disabled) {
-//   const btn = document.getElementById(id);
-//   if (!btn) return;
-//   btn.querySelector('span').textContent = text;
-//   btn.disabled = disabled;
-// }
-
-// // ── LOGIN ──
-// const loginForm = document.getElementById('loginForm');
-// if (loginForm) {
-//   loginForm.addEventListener('submit', async e => {
-//     e.preventDefault();
-//     setBtn('loginBtn', 'Signing In...', true);
-//     document.getElementById('loginError').classList.remove('show');
-
-//     const email    = document.getElementById('loginEmail').value.trim();
-//     const password = document.getElementById('loginPassword').value;
-
-//     try {
-//       const res = await fetch(`${API}/auth/login`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ email, password })
-//       });
-//       const data = await res.json();
-
-//       if (!res.ok) {
-//         showErr('loginError', data.message || 'Login failed.');
-//         setBtn('loginBtn', 'Sign In', false);
-//         return;
-//       }
-
-//       localStorage.setItem('sb_token', data.token);
-//       localStorage.setItem('sb_user', JSON.stringify(data.user));
-//       window.location.href = 'dashboard.html';
-//     } catch {
-//       showErr('loginError', 'Cannot connect to server. Make sure the backend is running on port 5000.');
-//       setBtn('loginBtn', 'Sign In', false);
-//     }
-//   });
-// }
-
-// // ── REGISTER ──
-// const registerForm = document.getElementById('registerForm');
-// if (registerForm) {
-//   registerForm.addEventListener('submit', async e => {
-//     e.preventDefault();
-//     setBtn('regBtn', 'Creating Account...', true);
-//     document.getElementById('regError').classList.remove('show');
-
-//     const body = {
-//       firstName:   document.getElementById('regFirst').value.trim(),
-//       lastName:    document.getElementById('regLast').value.trim(),
-//       email:       document.getElementById('regEmail').value.trim(),
-//       phone:       document.getElementById('regPhone').value.trim(),
-//       password:    document.getElementById('regPassword').value,
-//       accountType: document.getElementById('regAccType').value
-//     };
-
-//     if (!document.getElementById('termsCheck').checked) {
-//       showErr('regError', 'Please accept the Terms of Service to continue.');
-//       setBtn('regBtn', 'Open My Account', false);
-//       return;
-//     }
-
-//     try {
-//       const res = await fetch(`${API}/auth/register`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(body)
-//       });
-//       const data = await res.json();
-
-//       if (!res.ok) {
-//         showErr('regError', data.message || 'Registration failed.');
-//         setBtn('regBtn', 'Open My Account', false);
-//         return;
-//       }
-
-//       showSuc('regSuccess', '✓ Account created successfully! Redirecting to login...');
-//       setTimeout(() => window.location.href = 'login.html', 2000);
-//     } catch {
-//       showErr('regError', 'Cannot connect to server. Make sure backend is running.');
-//       setBtn('regBtn', 'Open My Account', false);
-//     }
-//   });
-// }
 // assets/js/auth.js  — FIXED VERSION
+console.log("AUTH.JS LOADED");
 const API = 'http://localhost:5000/api';
 
 // ── Cursor (safe, runs after DOM ready) ──────────────────────────────────────
@@ -194,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ email, password })
         });
         const data = await res.json();
-
+        console.log("LOGIN RESPONSE:", data);
         if (!res.ok) {
           showErr('loginError', data.message || 'Login failed. Check your credentials.');
           setBtnReady('loginBtn', 'Sign In');
@@ -202,9 +86,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Success — save token and redirect
+        // localStorage.setItem('sb_token', data.token);
+        // localStorage.setItem('sb_user', JSON.stringify(data.user));
+        // window.location.href = 'dashboard.html';
         localStorage.setItem('sb_token', data.token);
-        localStorage.setItem('sb_user', JSON.stringify(data.user));
-        window.location.href = 'dashboard.html';
+localStorage.setItem('sb_user', JSON.stringify(data.user));
+
+console.log("Logged in user:", data.user);
+
+const isAdminPage =
+    window.location.pathname.includes('admin-login');
+
+if (isAdminPage) {
+
+    if (data.user.role !== 'admin') {
+
+        alert('Access Denied. Admin account required.');
+
+        localStorage.clear();
+
+        setBtnReady('loginBtn', 'Sign In');
+
+        return;
+    }
+
+    window.location.href = 'admin-dashboard.html';
+
+} else {
+
+    if (data.user.role === 'admin') {
+
+        alert('Please use Admin Login.');
+
+        localStorage.clear();
+
+        setBtnReady('loginBtn', 'Sign In');
+
+        return;
+    }
+
+    window.location.href = 'dashboard.html';
+}
 
       } catch (err) {
         showErr('loginError',

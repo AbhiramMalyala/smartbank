@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartBank Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="../assets/css/global.css">
+
+<style>
+.admin-container{
+    display:flex;
+    min-height:100vh;
+}
+
+.admin-sidebar{
+    width:260px;
+    background:#111827;
+    border-right:1px solid #2a2f3a;
+    padding:20px;
+}
+
+.admin-sidebar h2{
+    color:#0fd4c8;
+    margin-bottom:30px;
+}
+
+.admin-menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.admin-menu button{
+    padding:12px;
+    background:#1a1f2e;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    text-align:left;
+}
+
+.admin-menu button:hover{
+    background:#0fd4c8;
+    color:black;
+}
+
+.admin-content{
+    flex:1;
+    padding:25px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:#1a1f2e;
+    padding:20px;
+    border-radius:12px;
+}
+
+.card h3{
+    color:#0fd4c8;
+    font-size:14px;
+}
+
+.card p{
+    font-size:32px;
+    margin-top:10px;
+}
+
+.section{
+    background:#1a1f2e;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:12px;
+    border-bottom:1px solid #333;
+    text-align:left;
+}
+
+th{
+    color:#0fd4c8;
+}
+
+.status-clean{
+    color:#22c55e;
+}
+
+.status-medium{
+    color:#f59e0b;
+}
+
+.status-high{
+    color:#ef4444;
+}
+
+.logout-btn{
+    margin-top:20px;
+    width:100%;
+    background:#ef4444 !important;
+}
+.freeze-btn{
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.freeze-btn:hover{
+    background: #dc2626;
+}
+.unfreeze-btn{
+    background:#22c55e;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.unfreeze-btn:hover{
+    background:#16a34a;
+}
+</style>
+</head>
+<script>
+async function loadStats() {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            'http://localhost:5000/api/admin/stats',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        document.getElementById('totalUsers').innerText =
+            data.totalUsers || 0;
+
+        document.getElementById('totalTransactions').innerText =
+            data.totalTransactions || 0;
+
+        document.getElementById('fraudAlerts').innerText =
+            data.fraudAlerts || 0;
+
+        document.getElementById('blockedTransactions').innerText =
+            data.blockedTransactions || 0;
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+loadStats();
+</script>
+<body>
+
+<div class="admin-container">
+
+    <!-- SIDEBAR -->
+    <div class="admin-sidebar">
+
+        <h2>SmartBank Admin</h2>
+
+        <div class="admin-menu">
+
+           <button onclick="showSection('dashboard')">Dashboard</button>
+
+<button onclick="showSection('users')">Users</button>
+
+<button onclick="showSection('fraud')">Fraud Monitoring</button>
+
+<button onclick="showSection('alerts')">Fraud Alerts</button>
+
+<button onclick="showSection('audit')">Audit Logs</button>
+
+            <button class="logout-btn" onclick="logout()">
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="admin-content">
+        <div id="dashboardSection">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+
+    <h1>Admin Dashboard</h1>
+
+    <div id="adminInfo"
+         style="
+            background:#1a1f2e;
+            padding:10px 15px;
+            border-radius:8px;
+         ">
+        👤 Admin
+    </div>
+
+</div>
+
+        <div class="cards">
+
+
+            <div class="card">
+                <h3>Total Users</h3>
+                <p id="totalUsers">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Total Transactions</h3>
+                <p id="totalTransactions">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Fraud Alerts</h3>
+                <p id="fraudAlerts">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Blocked Transactions</h3>
+                <p id="blockedTransactions">0</p>
+            </div>
+
+        </div>
+        <div class="cards">
+
+    <div class="card">
+        <h3>High Risk Transactions</h3>
+        <p id="highRiskCount">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Medium Risk Transactions</h3>
+        <p id="mediumRiskCount">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Low Risk Transactions</h3>
+        <p id="lowRiskCount">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Frozen Accounts</h3>
+        <p id="frozenUsers">0</p>
+    </div>
+    <div class="section" style="margin-top:20px;">
+    <h2>Fraud Risk Distribution</h2>
+
+    <div style="
+        height:350px;
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    ">
+        <canvas id="riskChart"></canvas>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+        <!-- FRAUD MONITORING -->
+
+        <div class="section" id="fraudSection">
+
+            <h2>Fraud Monitoring</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Txn ID</th>
+                        <th>Amount</th>
+                        <th>Rule Score</th>
+                        <th>ML Score</th>
+                        <th>Risk Level</th>
+                        <th>Prediction</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="fraudTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- USERS -->
+
+        <div class="section" id="usersSection">
+
+            <h2>Recent Users</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Account Number</th>
+    <th>Risk Score</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+                </thead>
+
+                <tbody id="usersTable">
+
+                
+
+                </tbody>
+
+            </table>
+
+        </div>
+        <div class="section" id="alertsSection">
+
+    <h2>Fraud Alerts</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Alert ID</th>
+                <th>Risk Score</th>
+                <th>Risk Level</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody id="alertsTable">
+        </tbody>
+
+    </table>
+
+</div>
+<div class="section" id="auditSection">
+
+    <h2>Audit Logs</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Result</th>
+                <th>IP Address</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody id="auditTable">
+        </tbody>
+
+    </table>
+
+</div>
+
+    </div>
+
+</div>
+
+<!-- <script> -->
+
+<!-- function logout(){
+    localStorage.clear();
+    window.location.href="admin-login.html";
+} -->
+<script>
+
+function logout(){
+    localStorage.clear();
+    window.location.href="../index.html";
+}
+
+async function loadUsers() {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            'http://localhost:5000/api/admin/users',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        const table = document.getElementById('usersTable');
+
+        table.innerHTML = '';
+
+        data.users.forEach(user => {
+
+            table.innerHTML += `
+           <tr>
+    <td>${user.firstName}</td>
+    <td>${user.email}</td>
+    <td>${user.accountNumber}</td>
+    <td>${user.riskScore}</td>
+    <td>${user.isFrozen ? 'FROZEN' : 'ACTIVE'}</td>
+<td>
+    ${
+        user.isFrozen
+        ?
+        `<button class="unfreeze-btn"
+                 onclick="unfreezeUser('${user._id}')">
+            Unfreeze
+         </button>`
+        :
+        `<button class="freeze-btn"
+                 onclick="freezeUser('${user._id}')">
+            Freeze
+         </button>`
+    }
+</td>
+</tr>`;
+        });
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+async function loadTransactions() {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            'http://localhost:5000/api/admin/transactions',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        const table = document.getElementById('fraudTable');
+
+        table.innerHTML = '';
+
+        data.transactions.forEach(tx => {
+
+            table.innerHTML += `
+            <tr>
+    <td>${tx.txnId}</td>
+    <td>₹${tx.amount}</td>
+    <td>${tx.fraudScore || 0}</td>
+    <td>${tx.mlFraudScore || 0}</td>
+    <td>${tx.fraudLevel || 'LOW'}</td>
+    <td>${tx.mlPrediction || 'legitimate'}</td>
+    <td>${tx.status}</td>
+</tr>`;
+        });
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+async function loadAlerts() {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            'http://localhost:5000/api/admin/fraud-alerts',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        const table = document.getElementById('alertsTable');
+
+        table.innerHTML = '';
+
+        data.alerts.forEach(alert => {
+
+            table.innerHTML += `
+            <tr>
+                <td>${alert._id}</td>
+                <td>${alert.riskScore || 0}</td>
+                <td>${alert.riskLevel || 'LOW'}</td>
+                <td>${new Date(alert.createdAt).toLocaleString()}</td>
+            </tr>`;
+        });
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+async function loadAuditLogs() {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            'http://localhost:5000/api/admin/audit-logs',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        const table = document.getElementById('auditTable');
+
+        table.innerHTML = '';
+
+        data.logs.forEach(log => {
+
+            table.innerHTML += `
+            <tr>
+                <td>
+    ${log.userId?.firstName || 'System'}
+    <br>
+    <small>${log.userId?.email || ''}</small>
+</td>
+                <td>${log.action}</td>
+                <td>${log.result}</td>
+                <td>${log.ipAddress || '-'}</td>
+                <td>${new Date(log.createdAt).toLocaleString()}</td>
+            </tr>`;
+        });
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+async function loadAnalytics() {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            'http://localhost:5000/api/admin/analytics',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        document.getElementById('highRiskCount').innerText =
+            data.highRisk || 0;
+
+        document.getElementById('mediumRiskCount').innerText =
+            data.mediumRisk || 0;
+
+        document.getElementById('lowRiskCount').innerText =
+            data.lowRisk || 0;
+
+        document.getElementById('frozenUsers').innerText =
+            data.frozenUsers || 0;
+            renderRiskChart(
+    data.highRisk || 0,
+    data.mediumRisk || 0,
+    data.lowRisk || 0
+);
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+function renderRiskChart(high, medium, low) {
+
+    const ctx = document
+        .getElementById('riskChart')
+        .getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+            datasets: [{
+                label: 'Transactions',
+                data: [high, medium, low],
+                backgroundColor: [
+                    '#ef4444',
+                    '#f59e0b',
+                    '#22c55e'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+}
+async function freezeUser(id) {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            `http://localhost:5000/api/admin/freeze-user/${id}`,
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        loadUsers();
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+async function unfreezeUser(id) {
+
+    try {
+
+        const token = localStorage.getItem('sb_token');
+
+        const res = await fetch(
+            `http://localhost:5000/api/admin/unfreeze-user/${id}`,
+            {
+                method:'PUT',
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        loadUsers();
+
+    } catch(err){
+        console.error(err);
+    }
+}
+function showSection(section){
+
+    const sections = [
+        'dashboardSection',
+        'usersSection',
+        'fraudSection',
+        'alertsSection',
+        'auditSection'
+    ];
+
+    sections.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.style.display='none';
+    });
+
+    document.getElementById(
+        section + 'Section'
+    ).style.display='block';
+}
+const admin = JSON.parse(
+    localStorage.getItem('sb_user')
+);
+
+if(admin){
+
+    document.getElementById('adminInfo').innerHTML = `
+        👤 ${admin.firstName}
+        <br>
+        <small>${admin.email}</small>
+    `;
+}
+loadUsers();
+loadTransactions();
+loadAlerts();
+loadAnalytics();
+loadAuditLogs();
+showSection('dashboard');
+</script>
+
+
+</body>
+</html>

@@ -10,8 +10,14 @@ const router   = express.Router();
 function getUser()     { return require('../models/User');     }
 function getAuditLog() { return require('../models/AuditLog'); }
 
-const genToken = id =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '24h' });
+// const genToken = id =>
+//   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '24h' });
+const genToken = (id, role) =>
+jwt.sign(
+{ id, role },
+process.env.JWT_SECRET,
+{ expiresIn: process.env.JWT_EXPIRE || '24h' }
+);
 
 const audit = (userId, action, result, details, req) => {
   const AuditLog = getAuditLog();
@@ -55,7 +61,9 @@ router.post('/register', [
       isVerified:  true,
     });
 
-    const token = genToken(user._id);
+    // const token = genToken(user._id);
+    const token = genToken(user._id, user.role);
+
     await audit(user._id, 'REGISTER', 'success', { email }, req);
 
     res.status(201).json({
@@ -63,6 +71,7 @@ router.post('/register', [
       message: 'Account created successfully! Welcome to SmartBank.',
       token,
       user: {
+        role: user.role,
         id: user._id, firstName, lastName: user.lastName, email,
         accountNumber: user.accountNumber,
         accountType:   user.accountType,
@@ -122,7 +131,9 @@ router.post('/login', [
       lastLoginIP: req.clientIP || '',
     });
 
-    const token = genToken(user._id);
+    // const token = genToken(user._id);
+    const token = genToken(user._id, user.role);
+
     await audit(user._id, 'LOGIN', 'success', { email }, req);
 
     res.json({
@@ -131,6 +142,7 @@ router.post('/login', [
       token,
       user: {
         id:          user._id,
+        role: user.role,
         firstName:   user.firstName,
         lastName:    user.lastName,
         email:       user.email,

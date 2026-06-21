@@ -21,6 +21,26 @@ const txSchema = new mongoose.Schema({
   fraudScore:   { type: Number, default: 0 },
   fraudLevel:   { type: String, enum: ['clean','low','medium','high','critical'], default: 'clean' },
   fraudFlags:   [String],
+  mlFraudScore: {
+  type: Number,
+  default: 0
+},
+
+mlPrediction: {
+  type: String,
+  enum: ['legitimate', 'fraud'],
+  default: 'legitimate'
+},
+
+finalRiskScore: {
+  type: Number,
+  default: 0
+},
+
+modelVersion: {
+  type: String,
+  default: 'RF-v1'
+},
   isReviewed:   { type: Boolean, default: false },
   ipAddress:    { type: String },
   userAgent:    { type: String },
