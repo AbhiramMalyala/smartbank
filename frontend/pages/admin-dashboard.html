@@ -5,734 +5,619 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartBank Admin Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="../assets/css/global.css">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-.admin-container{
-    display:flex;
-    min-height:100vh;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#07090f;--bg-surface:#0c0f1a;--bg-card:#111520;--bg-card2:#161b2a;--bg-hover:#1c2235;
+  --border:rgba(255,255,255,0.06);--border-md:rgba(255,255,255,0.11);--border-hi:rgba(255,255,255,0.18);
+  --teal:#0ecfc3;--teal-dim:rgba(14,207,195,0.10);--teal-mid:rgba(14,207,195,0.20);
+  --danger:#ff4060;--danger-dim:rgba(255,64,96,0.10);
+  --amber:#f5a623;--amber-dim:rgba(245,166,35,0.10);
+  --green:#1fd17a;--green-dim:rgba(31,209,122,0.10);
+  --blue:#4f8ef7;--blue-dim:rgba(79,142,247,0.10);
+  --text-1:#dde4f0;--text-2:#7d8aa3;--text-3:#434e64;
+  --font-body:'Inter',sans-serif;--font-head:'DM Sans',sans-serif;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:18px;--sidebar-w:248px
 }
+html,body{height:100%;background:var(--bg-base);color:var(--text-1);font-family:var(--font-body);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-md);border-radius:99px}
+.admin-container{display:flex;min-height:100vh}
 
-.admin-sidebar{
-    width:260px;
-    background:#111827;
-    border-right:1px solid #2a2f3a;
-    padding:20px;
-}
+/* sidebar */
+.admin-sidebar{width:var(--sidebar-w);background:var(--bg-surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
+.sidebar-brand{padding:22px 18px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px}
+.brand-mark{width:36px;height:36px;background:var(--teal-dim);border:1px solid var(--teal-mid);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:19px;flex-shrink:0}
+.brand-name{font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--text-1);letter-spacing:-.3px;line-height:1.2}
+.brand-role{font-size:11px;color:var(--text-3);letter-spacing:.4px;text-transform:uppercase;margin-top:1px}
+.sidebar-section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;color:var(--text-3);padding:18px 18px 7px}
+.admin-menu{padding:0 10px;display:flex;flex-direction:column;gap:2px}
+.admin-menu button{width:100%;padding:10px 10px;background:transparent;color:var(--text-2);border:none;border-radius:var(--r-sm);cursor:pointer;text-align:left;font-family:var(--font-body);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;transition:background .14s,color .14s;position:relative;white-space:nowrap}
+.admin-menu button:hover{background:var(--bg-hover);color:var(--text-1)}
+.admin-menu button.active{background:var(--teal-dim);color:var(--teal)}
+.admin-menu button.active::before{content:'';position:absolute;left:0;top:7px;bottom:7px;width:3px;background:var(--teal);border-radius:0 3px 3px 0}
+.admin-menu button i{font-size:17px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--danger-dim);color:var(--danger);font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;border:1px solid rgba(255,64,96,.2)}
+.sidebar-divider{height:1px;background:var(--border);margin:10px 0}
+.sidebar-user{margin:0 10px 10px;padding:10px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);display:flex;align-items:center;gap:10px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--teal-dim);border:1px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:16px;flex-shrink:0}
+.user-meta{min-width:0}
+.user-name{font-size:13px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-email{font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-footer{padding:10px;border-top:1px solid var(--border)}
+.logout-btn{width:100%;padding:9px 10px;background:var(--danger-dim) !important;color:var(--danger) !important;border:1px solid rgba(255,64,96,.2) !important;border-radius:var(--r-sm);cursor:pointer;font-family:var(--font-body);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;transition:background .14s}
+.logout-btn:hover{background:rgba(255,64,96,.18) !important}
+.logout-btn i{font-size:17px}
 
-.admin-sidebar h2{
-    color:#0fd4c8;
-    margin-bottom:30px;
-}
+/* topbar */
+.admin-content{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg-base)}
+.topbar{height:60px;padding:0 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg-surface);position:sticky;top:0;z-index:10;flex-shrink:0}
+.topbar-left{display:flex;flex-direction:column;gap:1px}
+.topbar-title{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--text-1);letter-spacing:-.3px}
+.topbar-crumb{font-size:11.5px;color:var(--text-3)}
+.topbar-crumb span{color:var(--teal)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-icon-btn{width:34px;height:34px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;transition:background .14s,color .14s;position:relative}
+.topbar-icon-btn:hover{background:var(--bg-hover);color:var(--text-1)}
+.notif-dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--danger);border:1.5px solid var(--bg-surface)}
+#adminInfo{background:var(--bg-card);border:1px solid var(--border);padding:6px 12px 6px 8px;border-radius:var(--r-md);display:flex;align-items:center;gap:9px}
 
-.admin-menu{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
+/* page */
+.page-body{padding:24px 28px;flex:1}
+.page-section-title{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--text-1);letter-spacing:-.4px;margin-bottom:6px}
+.page-section-sub{font-size:13px;color:var(--text-3);margin-bottom:24px}
 
-.admin-menu button{
-    padding:12px;
-    background:#1a1f2e;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    text-align:left;
-}
+/* stat cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.card{background:var(--bg-card);border:1px solid var(--border);padding:18px 20px;border-radius:var(--r-lg);transition:border-color .2s,transform .15s;cursor:default;position:relative;overflow:hidden}
+.card:hover{border-color:var(--border-md);transform:translateY(-1px)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.card-icon{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.card-icon.teal{background:var(--teal-dim);color:var(--teal)}
+.card-icon.danger{background:var(--danger-dim);color:var(--danger)}
+.card-icon.amber{background:var(--amber-dim);color:var(--amber)}
+.card-icon.green{background:var(--green-dim);color:var(--green)}
+.card-icon.blue{background:var(--blue-dim);color:var(--blue)}
+.card-trend{font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;display:flex;align-items:center;gap:3px}
+.card-trend.up{background:var(--green-dim);color:var(--green)}
+.card-trend.down{background:var(--danger-dim);color:var(--danger)}
+.card-trend.neutral{background:var(--amber-dim);color:var(--amber)}
+.card-trend i{font-size:11px}
+.card h3{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text-3);margin-bottom:5px}
+.card p{font-family:var(--font-head);font-size:30px;font-weight:800;color:var(--text-1);letter-spacing:-1.5px;line-height:1}
+.card-divider{height:1px;background:var(--border);margin:14px 0 10px}
+.card-footer{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-3)}
+.card-footer i{font-size:13px}
+.sparkline-wrap{height:36px;margin-top:12px}
 
-.admin-menu button:hover{
-    background:#0fd4c8;
-    color:black;
-}
+/* chart grid */
+.chart-grid{display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:18px}
+.chart-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);padding:22px;overflow:hidden}
+.chart-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.chart-card-head h2{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px}
+.chart-card-head h2 i{color:var(--teal);font-size:17px}
+.chart-sub{font-size:12px;color:var(--text-3)}
+.chart-wrap{height:260px;display:flex;align-items:center;justify-content:center}
+.donut-wrap{height:220px;display:flex;align-items:center;justify-content:center;position:relative}
+.donut-center{position:absolute;text-align:center;pointer-events:none}
+.donut-center-num{font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--text-1);letter-spacing:-1px}
+.donut-center-label{font-size:11px;color:var(--text-3)}
+.legend-list{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.legend-item{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.legend-dot-label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-2)}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-val{font-size:12.5px;font-weight:600;color:var(--text-1)}
+.legend-pct{font-size:11px;color:var(--text-3);margin-left:4px}
+.leg-bar{flex:1;height:3px;background:var(--border-md);border-radius:2px;overflow:hidden;max-width:80px}
+.leg-bar-fill{height:100%;border-radius:2px}
 
-.admin-content{
-    flex:1;
-    padding:25px;
-}
+/* section */
+.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);margin-bottom:18px;overflow:hidden}
+.section-head{padding:18px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.section-head-left{display:flex;align-items:center;gap:10px}
+.section-head-icon{width:32px;height:32px;border-radius:var(--r-sm);background:var(--teal-dim);display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:16px;flex-shrink:0}
+.section-head h2{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text-1)}
 
-.cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-    margin-bottom:25px;
-}
+/* search */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--bg-card2);border:1px solid var(--border);border-radius:var(--r-sm);padding:0 12px;height:34px;min-width:200px}
+.search-bar i{color:var(--text-3);font-size:15px}
+.search-bar input{background:none;border:none;outline:none;color:var(--text-1);font-family:var(--font-body);font-size:13px;width:100%}
+.search-bar input::placeholder{color:var(--text-3)}
 
-.card{
-    background:#1a1f2e;
-    padding:20px;
-    border-radius:12px;
-}
+/* filter chips */
+.filter-chips{display:flex;gap:6px;padding:12px 22px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.chip{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--text-2);background:transparent;font-family:var(--font-body);transition:all .14s}
+.chip:hover{border-color:var(--border-md);color:var(--text-1)}
+.chip.active-chip{background:var(--teal-dim);color:var(--teal);border-color:rgba(14,207,195,.25)}
 
-.card h3{
-    color:#0fd4c8;
-    font-size:14px;
-}
+/* table */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);padding:0 18px 12px;text-align:left;white-space:nowrap}
+th:first-child{padding-left:22px}th:last-child{padding-right:22px}
+td{padding:14px 18px;border-bottom:1px solid var(--border);color:var(--text-2);font-size:13.5px;vertical-align:middle}
+td:first-child{padding-left:22px}td:last-child{padding-right:22px}
+tbody tr:last-child td{border-bottom:none}
+tbody tr{transition:background .12s}
+tbody tr:hover td{background:rgba(255,255,255,0.018)}
+.cell-primary{font-weight:600;color:var(--text-1)}
+.cell-mono{font-family:'SF Mono','Fira Code',monospace;font-size:12px;color:var(--text-3)}
+.cell-amount{font-family:var(--font-head);font-weight:700;font-size:15px;color:var(--text-1)}
 
-.card p{
-    font-size:32px;
-    margin-top:10px;
-}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600}
+.badge-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.b-clean,.b-low,.b-active{background:var(--green-dim);color:var(--green)}
+.b-clean .badge-dot,.b-low .badge-dot,.b-active .badge-dot{background:var(--green)}
+.b-medium,.b-warn{background:var(--amber-dim);color:var(--amber)}
+.b-medium .badge-dot,.b-warn .badge-dot{background:var(--amber)}
+.b-high,.b-danger,.b-blocked{background:var(--danger-dim);color:var(--danger)}
+.b-high .badge-dot,.b-danger .badge-dot,.b-blocked .badge-dot{background:var(--danger)}
+.b-frozen,.b-info{background:var(--blue-dim);color:var(--blue)}
+.b-frozen .badge-dot,.b-info .badge-dot{background:var(--blue)}
+.b-neutral{background:rgba(125,138,163,0.12);color:var(--text-2)}
+.b-neutral .badge-dot{background:var(--text-3)}
 
-.section{
-    background:#1a1f2e;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:20px;
-}
+/* score bar */
+.score-bar-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{flex:1;height:4px;background:var(--border-md);border-radius:2px;overflow:hidden;min-width:48px}
+.score-bar-fill{height:100%;border-radius:2px}
+.score-num{font-size:12px;font-weight:600;min-width:24px;text-align:right}
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+/* action buttons */
+.freeze-btn,.unfreeze-btn{padding:5px 13px;border-radius:var(--r-sm);cursor:pointer;font-size:12px;font-weight:600;font-family:var(--font-body);display:inline-flex;align-items:center;gap:5px;transition:background .14s}
+.freeze-btn{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(255,64,96,.22)}
+.freeze-btn:hover{background:rgba(255,64,96,.2)}
+.unfreeze-btn{background:var(--green-dim);color:var(--green);border:1px solid rgba(31,209,122,.22)}
+.unfreeze-btn:hover{background:rgba(31,209,122,.2)}
+.freeze-btn i,.unfreeze-btn i{font-size:13px}
 
-th,td{
-    padding:12px;
-    border-bottom:1px solid #333;
-    text-align:left;
-}
+/* empty state */
+.empty-state{padding:52px 22px;text-align:center;color:var(--text-3)}
+.empty-state i{font-size:36px;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:13.5px}
 
-th{
-    color:#0fd4c8;
-}
+/* audit */
+.audit-user-name{font-weight:600;color:var(--text-1);font-size:13px}
+.audit-user-email{font-size:11.5px;color:var(--text-3)}
 
-.status-clean{
-    color:#22c55e;
-}
-
-.status-medium{
-    color:#f59e0b;
-}
-
-.status-high{
-    color:#ef4444;
-}
-
-.logout-btn{
-    margin-top:20px;
-    width:100%;
-    background:#ef4444 !important;
-}
-.freeze-btn{
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.freeze-btn:hover{
-    background: #dc2626;
-}
-.unfreeze-btn{
-    background:#22c55e;
-    color:white;
-    border:none;
-    padding:6px 12px;
-    border-radius:6px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.unfreeze-btn:hover{
-    background:#16a34a;
-}
+/* section visibility */
+#usersSection,#fraudSection,#alertsSection,#auditSection{display:none}
 </style>
 </head>
+
 <script>
-async function loadStats() {
-
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            'http://localhost:5000/api/admin/stats',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        document.getElementById('totalUsers').innerText =
-            data.totalUsers || 0;
-
-        document.getElementById('totalTransactions').innerText =
-            data.totalTransactions || 0;
-
-        document.getElementById('fraudAlerts').innerText =
-            data.fraudAlerts || 0;
-
-        document.getElementById('blockedTransactions').innerText =
-            data.blockedTransactions || 0;
-
-    } catch (err) {
-        console.error(err);
-    }
+async function loadStats(){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch('http://localhost:5000/api/admin/stats',{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    animateCount('totalUsers',data.totalUsers||0);
+    animateCount('totalTransactions',data.totalTransactions||0);
+    animateCount('fraudAlerts',data.fraudAlerts||0);
+    animateCount('blockedTransactions',data.blockedTransactions||0);
+  }catch(err){console.error(err)}
 }
-
 loadStats();
 </script>
-<body>
 
+<body>
 <div class="admin-container">
 
-    <!-- SIDEBAR -->
-    <div class="admin-sidebar">
+<div class="admin-sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark"><i class="ti ti-shield-check"></i></div>
+    <div><div class="brand-name">SmartBank</div><div class="brand-role">Admin Console</div></div>
+  </div>
+  <div class="sidebar-section-label">Main Menu</div>
+  <div class="admin-menu">
+    <button onclick="showSection('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+    <button onclick="showSection('users')"><i class="ti ti-users"></i> Users</button>
+    <button onclick="showSection('fraud')"><i class="ti ti-alert-triangle"></i> Fraud Monitoring<span class="nav-badge" id="fraudBadge" style="display:none">0</span></button>
+    <button onclick="showSection('alerts')"><i class="ti ti-bell-ringing"></i> Fraud Alerts</button>
+    <button onclick="showSection('audit')"><i class="ti ti-clipboard-list"></i> Audit Logs</button>
+  </div>
+  <div style="flex:1"></div>
+  <div class="sidebar-user" id="sidebarUser">
+    <div class="user-avatar"><i class="ti ti-user"></i></div>
+    <div class="user-meta"><div class="user-name">Administrator</div><div class="user-email">admin@smartbank.io</div></div>
+  </div>
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> Sign out</button>
+  </div>
+</div>
 
-        <h2>SmartBank Admin</h2>
+<div class="admin-content">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-crumb">SmartBank &rsaquo; <span id="topbarCrumb">Overview</span></div>
+    </div>
+    <div class="topbar-right">
+      <!-- <div class="topbar-icon-btn" title="Notifications"><i class="ti ti-bell"></i><span class="notif-dot"></span></div>
+      <div class="topbar-icon-btn" title="Settings"><i class="ti ti-settings"></i></div> -->
+      <div id="adminInfo">
+        <div class="user-avatar" style="width:28px;height:28px;font-size:14px"><i class="ti ti-user"></i></div>
+        <div class="user-meta"><div class="user-name">Admin</div><div class="user-email" style="font-size:11px">administrator</div></div>
+      </div>
+    </div>
+  </div>
 
-        <div class="admin-menu">
+  <div class="page-body">
 
-           <button onclick="showSection('dashboard')">Dashboard</button>
+    <div id="dashboardSection">
+      <div class="page-section-title">Good morning 👋</div>
+      <div class="page-section-sub">Here's what's happening across your platform today.</div>
 
-<button onclick="showSection('users')">Users</button>
-
-<button onclick="showSection('fraud')">Fraud Monitoring</button>
-
-<button onclick="showSection('alerts')">Fraud Alerts</button>
-
-<button onclick="showSection('audit')">Audit Logs</button>
-
-            <button class="logout-btn" onclick="logout()">
-                Logout
-            </button>
-
+      <div class="cards">
+        <div class="card">
+          <div class="card-top"><div class="card-icon teal"><i class="ti ti-users"></i></div><div class="card-trend up"><i class="ti ti-trending-up"></i> 4.2%</div></div>
+          <h3>Total Users</h3><p id="totalUsers">0</p>
+          <div class="sparkline-wrap"><canvas id="spk1"></canvas></div>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-clock"></i> Updated just now</div>
         </div>
-
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div class="admin-content">
-        <div id="dashboardSection">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-
-    <h1>Admin Dashboard</h1>
-
-    <div id="adminInfo"
-         style="
-            background:#1a1f2e;
-            padding:10px 15px;
-            border-radius:8px;
-         ">
-        👤 Admin
-    </div>
-
-</div>
-
-        <div class="cards">
-
-
-            <div class="card">
-                <h3>Total Users</h3>
-                <p id="totalUsers">0</p>
-            </div>
-
-            <div class="card">
-                <h3>Total Transactions</h3>
-                <p id="totalTransactions">0</p>
-            </div>
-
-            <div class="card">
-                <h3>Fraud Alerts</h3>
-                <p id="fraudAlerts">0</p>
-            </div>
-
-            <div class="card">
-                <h3>Blocked Transactions</h3>
-                <p id="blockedTransactions">0</p>
-            </div>
-
+        <div class="card">
+          <div class="card-top"><div class="card-icon blue"><i class="ti ti-arrows-exchange"></i></div><div class="card-trend up"><i class="ti ti-trending-up"></i> 12%</div></div>
+          <h3>Total Transactions</h3><p id="totalTransactions">0</p>
+          <div class="sparkline-wrap"><canvas id="spk2"></canvas></div>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-clock"></i> Updated just now</div>
         </div>
-        <div class="cards">
-
-    <div class="card">
-        <h3>High Risk Transactions</h3>
-        <p id="highRiskCount">0</p>
-    </div>
-
-    <div class="card">
-        <h3>Medium Risk Transactions</h3>
-        <p id="mediumRiskCount">0</p>
-    </div>
-
-    <div class="card">
-        <h3>Low Risk Transactions</h3>
-        <p id="lowRiskCount">0</p>
-    </div>
-
-    <div class="card">
-        <h3>Frozen Accounts</h3>
-        <p id="frozenUsers">0</p>
-    </div>
-    <div class="section" style="margin-top:20px;">
-    <h2>Fraud Risk Distribution</h2>
-
-    <div style="
-        height:350px;
-        width:100%;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    ">
-        <canvas id="riskChart"></canvas>
-    </div>
-</div>
-
-</div>
-
-</div>
-
-        <!-- FRAUD MONITORING -->
-
-        <div class="section" id="fraudSection">
-
-            <h2>Fraud Monitoring</h2>
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Txn ID</th>
-                        <th>Amount</th>
-                        <th>Rule Score</th>
-                        <th>ML Score</th>
-                        <th>Risk Level</th>
-                        <th>Prediction</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="fraudTable">
-
-                </tbody>
-
-            </table>
-
+        <div class="card">
+          <div class="card-top"><div class="card-icon danger"><i class="ti ti-alert-triangle"></i></div><div class="card-trend down"><i class="ti ti-trending-up"></i> 8%</div></div>
+          <h3>Fraud Alerts</h3><p id="fraudAlerts">0</p>
+          <div class="sparkline-wrap"><canvas id="spk3"></canvas></div>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-clock"></i> Updated just now</div>
         </div>
-
-        <!-- USERS -->
-
-        <div class="section" id="usersSection">
-
-            <h2>Recent Users</h2>
-
-            <table>
-
-                <thead>
-                    <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Account Number</th>
-    <th>Risk Score</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
-                </thead>
-
-                <tbody id="usersTable">
-
-                
-
-                </tbody>
-
-            </table>
-
+        <div class="card">
+          <div class="card-top"><div class="card-icon amber"><i class="ti ti-ban"></i></div><div class="card-trend neutral"><i class="ti ti-minus"></i> 0%</div></div>
+          <h3>Blocked Transactions</h3><p id="blockedTransactions">0</p>
+          <div class="sparkline-wrap"><canvas id="spk4"></canvas></div>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-clock"></i> Updated just now</div>
         </div>
-        <div class="section" id="alertsSection">
+      </div>
 
-    <h2>Fraud Alerts</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="card-top"><div class="card-icon danger"><i class="ti ti-flame"></i></div></div>
+          <h3>High Risk</h3><p id="highRiskCount">0</p>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-arrow-up-right" style="color:var(--danger)"></i> Needs attention</div>
+        </div>
+        <div class="card">
+          <div class="card-top"><div class="card-icon amber"><i class="ti ti-alert-circle"></i></div></div>
+          <h3>Medium Risk</h3><p id="mediumRiskCount">0</p>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-eye" style="color:var(--amber)"></i> Monitor closely</div>
+        </div>
+        <div class="card">
+          <div class="card-top"><div class="card-icon green"><i class="ti ti-circle-check"></i></div></div>
+          <h3>Low Risk</h3><p id="lowRiskCount">0</p>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-check" style="color:var(--green)"></i> All clear</div>
+        </div>
+        <div class="card">
+          <div class="card-top"><div class="card-icon blue"><i class="ti ti-lock"></i></div></div>
+          <h3>Frozen Accounts</h3><p id="frozenUsers">0</p>
+          <div class="card-divider"></div>
+          <div class="card-footer"><i class="ti ti-snowflake" style="color:var(--blue)"></i> Restricted access</div>
+        </div>
+      </div>
 
-    <table>
-
-        <thead>
-            <tr>
-                <th>Alert ID</th>
-                <th>Risk Score</th>
-                <th>Risk Level</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-
-        <tbody id="alertsTable">
-        </tbody>
-
-    </table>
-
-</div>
-<div class="section" id="auditSection">
-
-    <h2>Audit Logs</h2>
-
-    <table>
-
-        <thead>
-            <tr>
-                <th>User</th>
-                <th>Action</th>
-                <th>Result</th>
-                <th>IP Address</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-
-        <tbody id="auditTable">
-        </tbody>
-
-    </table>
-
-</div>
-
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <h2><i class="ti ti-chart-bar"></i> Risk Distribution</h2>
+            <span class="chart-sub">Transaction risk levels</span>
+          </div>
+          <div class="chart-wrap"><canvas id="riskChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-head">
+            <h2><i class="ti ti-chart-donut"></i> Risk Breakdown</h2>
+            <span class="chart-sub">By percentage</span>
+          </div>
+          <div class="donut-wrap">
+            <canvas id="donutChart"></canvas>
+            <div class="donut-center"><div class="donut-center-num" id="donutTotal">0</div><div class="donut-center-label">total</div></div>
+          </div>
+          <div class="legend-list" id="donutLegend"></div>
+        </div>
+      </div>
     </div>
 
+    <div class="section" id="fraudSection">
+      <div class="section-head">
+        <div class="section-head-left"><div class="section-head-icon"><i class="ti ti-alert-triangle"></i></div><h2>Fraud Monitoring</h2></div>
+        <div class="search-bar"><i class="ti ti-search"></i><input type="text" placeholder="Search transactions…" oninput="filterTable('fraudTable',this.value)"></div>
+      </div>
+      <div class="filter-chips">
+        <button class="chip active-chip" onclick="setChip(this,'fraudTable','')">All</button>
+        <button class="chip" onclick="setChip(this,'fraudTable','HIGH')">High Risk</button>
+        <button class="chip" onclick="setChip(this,'fraudTable','MEDIUM')">Medium Risk</button>
+        <button class="chip" onclick="setChip(this,'fraudTable','LOW')">Low Risk</button>
+        <button class="chip" onclick="setChip(this,'fraudTable','blocked')">Blocked</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Txn ID</th><th>Amount</th><th>Rule Score</th><th>ML Score</th><th>Risk Level</th><th>Prediction</th><th>Status</th></tr></thead>
+          <tbody id="fraudTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="usersSection">
+      <div class="section-head">
+        <div class="section-head-left"><div class="section-head-icon"><i class="ti ti-users"></i></div><h2>Users</h2></div>
+        <div class="search-bar"><i class="ti ti-search"></i><input type="text" placeholder="Search users…" oninput="filterTable('usersTable',this.value)"></div>
+      </div>
+      <div class="filter-chips">
+        <button class="chip active-chip" onclick="setChip(this,'usersTable','')">All Users</button>
+        <button class="chip" onclick="setChip(this,'usersTable','Active')">Active</button>
+        <button class="chip" onclick="setChip(this,'usersTable','Frozen')">Frozen</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Account</th><th>Risk Score</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="usersTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="alertsSection">
+      <div class="section-head">
+        <div class="section-head-left"><div class="section-head-icon"><i class="ti ti-bell-ringing"></i></div><h2>Fraud Alerts</h2></div>
+        <div class="search-bar"><i class="ti ti-search"></i><input type="text" placeholder="Search alerts…" oninput="filterTable('alertsTable',this.value)"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Alert ID</th><th>Risk Score</th><th>Risk Level</th><th>Date</th></tr></thead>
+          <tbody id="alertsTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="auditSection">
+      <div class="section-head">
+        <div class="section-head-left"><div class="section-head-icon"><i class="ti ti-clipboard-list"></i></div><h2>Audit Logs</h2></div>
+        <div class="search-bar"><i class="ti ti-search"></i><input type="text" placeholder="Search logs…" oninput="filterTable('auditTable',this.value)"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>User</th><th>Action</th><th>Result</th><th>IP Address</th><th>Date</th></tr></thead>
+          <tbody id="auditTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
 </div>
 
-<!-- <script> -->
-
-<!-- function logout(){
-    localStorage.clear();
-    window.location.href="admin-login.html";
-} -->
 <script>
-
-function logout(){
-    localStorage.clear();
-    window.location.href="../index.html";
+function animateCount(id,target){
+  const el=document.getElementById(id);if(!el)return;
+  const dur=900,step=16,steps=dur/step;let cur=0;const inc=target/steps;
+  const t=setInterval(()=>{cur=Math.min(cur+inc,target);el.textContent=Math.round(cur).toLocaleString();if(cur>=target)clearInterval(t);},step);
 }
 
-async function loadUsers() {
+function scoreColor(s){return s>=70?'var(--danger)':s>=40?'var(--amber)':'var(--green)'}
+function levelClass(l){const u=(l||'').toUpperCase();return u==='HIGH'?'b-high':u==='MEDIUM'?'b-medium':'b-clean'}
 
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            'http://localhost:5000/api/admin/users',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        const table = document.getElementById('usersTable');
-
-        table.innerHTML = '';
-
-        data.users.forEach(user => {
-
-            table.innerHTML += `
-           <tr>
-    <td>${user.firstName}</td>
-    <td>${user.email}</td>
-    <td>${user.accountNumber}</td>
-    <td>${user.riskScore}</td>
-    <td>${user.isFrozen ? 'FROZEN' : 'ACTIVE'}</td>
-<td>
-    ${
-        user.isFrozen
-        ?
-        `<button class="unfreeze-btn"
-                 onclick="unfreezeUser('${user._id}')">
-            Unfreeze
-         </button>`
-        :
-        `<button class="freeze-btn"
-                 onclick="freezeUser('${user._id}')">
-            Freeze
-         </button>`
-    }
-</td>
-</tr>`;
-        });
-
-    } catch(err) {
-        console.error(err);
-    }
+function filterTable(id,q){
+  const tb=document.getElementById(id);if(!tb)return;
+  const lq=q.toLowerCase();
+  tb.querySelectorAll('tr').forEach(r=>{r.style.display=lq===''||r.textContent.toLowerCase().includes(lq)?'':'none'});
 }
-async function loadTransactions() {
 
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            'http://localhost:5000/api/admin/transactions',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        const table = document.getElementById('fraudTable');
-
-        table.innerHTML = '';
-
-        data.transactions.forEach(tx => {
-
-            table.innerHTML += `
-            <tr>
-    <td>${tx.txnId}</td>
-    <td>₹${tx.amount}</td>
-    <td>${tx.fraudScore || 0}</td>
-    <td>${tx.mlFraudScore || 0}</td>
-    <td>${tx.fraudLevel || 'LOW'}</td>
-    <td>${tx.mlPrediction || 'legitimate'}</td>
-    <td>${tx.status}</td>
-</tr>`;
-        });
-
-    } catch(err) {
-        console.error(err);
-    }
+function setChip(btn,tbodyId,val){
+  btn.closest('.filter-chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('active-chip'));
+  btn.classList.add('active-chip');
+  const tb=document.getElementById(tbodyId);if(!tb)return;
+  tb.querySelectorAll('tr').forEach(r=>{r.style.display=val===''||r.textContent.includes(val)?'':'none'});
 }
-async function loadAlerts() {
 
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            'http://localhost:5000/api/admin/fraud-alerts',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        const table = document.getElementById('alertsTable');
-
-        table.innerHTML = '';
-
-        data.alerts.forEach(alert => {
-
-            table.innerHTML += `
-            <tr>
-                <td>${alert._id}</td>
-                <td>${alert.riskScore || 0}</td>
-                <td>${alert.riskLevel || 'LOW'}</td>
-                <td>${new Date(alert.createdAt).toLocaleString()}</td>
-            </tr>`;
-        });
-
-    } catch(err) {
-        console.error(err);
-    }
+function drawSparkline(id,data,color){
+  const canvas=document.getElementById(id);if(!canvas)return;
+  const W=canvas.parentElement.offsetWidth||200,H=36;canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  const max=Math.max(...data),min=Math.min(...data);
+  const pts=data.map((v,i)=>({x:(i/(data.length-1))*W,y:H-4-((v-min)/(max-min||1))*(H-8)}));
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.strokeStyle=color;ctx.lineWidth=1.8;ctx.stroke();
+  ctx.lineTo(pts[pts.length-1].x,H);ctx.lineTo(0,H);ctx.closePath();
+  ctx.fillStyle=color+'22';ctx.fill();
 }
-async function loadAuditLogs() {
 
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            'http://localhost:5000/api/admin/audit-logs',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        const table = document.getElementById('auditTable');
-
-        table.innerHTML = '';
-
-        data.logs.forEach(log => {
-
-            table.innerHTML += `
-            <tr>
-                <td>
-    ${log.userId?.firstName || 'System'}
-    <br>
-    <small>${log.userId?.email || ''}</small>
-</td>
-                <td>${log.action}</td>
-                <td>${log.result}</td>
-                <td>${log.ipAddress || '-'}</td>
-                <td>${new Date(log.createdAt).toLocaleString()}</td>
-            </tr>`;
-        });
-
-    } catch(err) {
-        console.error(err);
-    }
+function initSparklines(){
+  const r=(b)=>Array.from({length:12},(_,i)=>Math.round(b+Math.sin(i*.8)*b*.15+Math.random()*b*.1));
+  setTimeout(()=>{
+    drawSparkline('spk1',r(850),'#0ecfc3');
+    drawSparkline('spk2',r(3400),'#4f8ef7');
+    drawSparkline('spk3',r(42),'#ff4060');
+    drawSparkline('spk4',r(18),'#f5a623');
+  },200);
 }
-async function loadAnalytics() {
 
-    try {
+let riskCI=null,donutI=null;
 
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            'http://localhost:5000/api/admin/analytics',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        document.getElementById('highRiskCount').innerText =
-            data.highRisk || 0;
-
-        document.getElementById('mediumRiskCount').innerText =
-            data.mediumRisk || 0;
-
-        document.getElementById('lowRiskCount').innerText =
-            data.lowRisk || 0;
-
-        document.getElementById('frozenUsers').innerText =
-            data.frozenUsers || 0;
-            renderRiskChart(
-    data.highRisk || 0,
-    data.mediumRisk || 0,
-    data.lowRisk || 0
-);
-
-    } catch(err) {
-        console.error(err);
-    }
+function renderRiskChart(high,medium,low){
+  const ctx=document.getElementById('riskChart').getContext('2d');
+  if(riskCI)riskCI.destroy();
+  riskCI=new Chart(ctx,{
+    type:'bar',
+    data:{labels:['High Risk','Medium Risk','Low Risk'],datasets:[{data:[high,medium,low],backgroundColor:['rgba(255,64,96,.7)','rgba(245,166,35,.7)','rgba(31,209,122,.7)'],borderColor:['#ff4060','#f5a623','#1fd17a'],borderWidth:1.5,borderRadius:8,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#161b2a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#dde4f0',bodyColor:'#7d8aa3',padding:10,cornerRadius:8}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7d8aa3',font:{size:12,family:'Inter'}},border:{color:'rgba(255,255,255,.06)'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7d8aa3',font:{size:12,family:'Inter'}},border:{color:'rgba(255,255,255,.06)'}}}}
+  });
 }
-function renderRiskChart(high, medium, low) {
 
-    const ctx = document
-        .getElementById('riskChart')
-        .getContext('2d');
+function renderDonut(high,medium,low){
+  const total=high+medium+low||1;
+  const ctx=document.getElementById('donutChart').getContext('2d');
+  if(donutI)donutI.destroy();
+  donutI=new Chart(ctx,{type:'doughnut',data:{labels:['High','Medium','Low'],datasets:[{data:[high,medium,low],backgroundColor:['rgba(255,64,96,.75)','rgba(245,166,35,.75)','rgba(31,209,122,.75)'],borderColor:['#ff4060','#f5a623','#1fd17a'],borderWidth:1.5,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{backgroundColor:'#161b2a',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#dde4f0',bodyColor:'#7d8aa3',padding:10,cornerRadius:8}}}});
+  document.getElementById('donutTotal').textContent=(high+medium+low).toLocaleString();
+  const items=[{label:'High Risk',val:high,color:'#ff4060'},{label:'Medium Risk',val:medium,color:'#f5a623'},{label:'Low Risk',val:low,color:'#1fd17a'}];
+  document.getElementById('donutLegend').innerHTML=items.map(it=>{
+    const pct=Math.round(it.val/total*100);
+    return`<div class="legend-item"><div class="legend-dot-label"><span class="legend-dot" style="background:${it.color}"></span>${it.label}</div><div style="display:flex;align-items:center;gap:8px"><div class="leg-bar"><div class="leg-bar-fill" style="width:${pct}%;background:${it.color}"></div></div><span class="legend-val">${it.val.toLocaleString()}</span><span class="legend-pct">${pct}%</span></div></div>`;
+  }).join('');
+}
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['High Risk', 'Medium Risk', 'Low Risk'],
-            datasets: [{
-                label: 'Transactions',
-                data: [high, medium, low],
-                backgroundColor: [
-                    '#ef4444',
-                    '#f59e0b',
-                    '#22c55e'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
+async function loadUsers(){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch('http://localhost:5000/api/admin/users',{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    const table=document.getElementById('usersTable');table.innerHTML='';
+    if(!data.users||!data.users.length){table.innerHTML=`<tr><td colspan="6"><div class="empty-state"><i class="ti ti-users-off"></i><p>No users found</p></div></td></tr>`;return;}
+    data.users.forEach(user=>{
+      const sc=user.riskScore||0;
+      table.innerHTML+=`<tr>
+        <td><span class="cell-primary">${user.firstName}</span></td>
+        <td style="color:var(--text-2)">${user.email}</td>
+        <td><span class="cell-mono">${user.accountNumber}</span></td>
+        <td><div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${scoreColor(sc)}"></div></div><span class="score-num" style="color:${scoreColor(sc)}">${sc}</span></div></td>
+        <td><span class="badge ${user.isFrozen?'b-frozen':'b-active'}"><span class="badge-dot"></span>${user.isFrozen?'Frozen':'Active'}</span></td>
+        <td>${user.isFrozen?`<button class="unfreeze-btn" onclick="unfreezeUser('${user._id}')"><i class="ti ti-lock-open"></i>Unfreeze</button>`:`<button class="freeze-btn" onclick="freezeUser('${user._id}')"><i class="ti ti-lock"></i>Freeze</button>`}</td>
+      </tr>`;
     });
-
+  }catch(err){console.error(err)}
 }
-async function freezeUser(id) {
 
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            `http://localhost:5000/api/admin/freeze-user/${id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        alert(data.message);
-
-        loadUsers();
-
-    } catch(err) {
-        console.error(err);
-    }
+async function loadTransactions(){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch('http://localhost:5000/api/admin/transactions',{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    const table=document.getElementById('fraudTable');table.innerHTML='';
+    if(!data.transactions||!data.transactions.length){table.innerHTML=`<tr><td colspan="7"><div class="empty-state"><i class="ti ti-database-off"></i><p>No transactions found</p></div></td></tr>`;return;}
+    let highCount=0;
+    data.transactions.forEach(tx=>{
+      const level=(tx.fraudLevel||'LOW').toUpperCase();
+      if(level==='HIGH')highCount++;
+      const statusCls=tx.status==='blocked'?'b-blocked':'b-active';
+      table.innerHTML+=`<tr>
+        <td><span class="cell-mono">${tx.txnId}</span></td>
+        <td><span class="cell-amount">&#8377;${(tx.amount||0).toLocaleString()}</span></td>
+        <td><span style="font-weight:600;color:${scoreColor(tx.fraudScore||0)}">${tx.fraudScore||0}</span></td>
+        <td><span style="font-weight:600;color:${scoreColor(tx.mlFraudScore||0)}">${tx.mlFraudScore||0}</span></td>
+        <td><span class="badge ${levelClass(level)}"><span class="badge-dot"></span>${level}</span></td>
+        <td style="color:var(--text-2)">${tx.mlPrediction||'legitimate'}</td>
+        <td><span class="badge ${statusCls}"><span class="badge-dot"></span>${tx.status}</span></td>
+      </tr>`;
+    });
+    const badge=document.getElementById('fraudBadge');
+    if(badge&&highCount>0){badge.textContent=highCount;badge.style.display='inline-flex';}
+  }catch(err){console.error(err)}
 }
-async function unfreezeUser(id) {
 
-    try {
-
-        const token = localStorage.getItem('sb_token');
-
-        const res = await fetch(
-            `http://localhost:5000/api/admin/unfreeze-user/${id}`,
-            {
-                method:'PUT',
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        alert(data.message);
-
-        loadUsers();
-
-    } catch(err){
-        console.error(err);
-    }
+async function loadAlerts(){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch('http://localhost:5000/api/admin/fraud-alerts',{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    const table=document.getElementById('alertsTable');table.innerHTML='';
+    if(!data.alerts||!data.alerts.length){table.innerHTML=`<tr><td colspan="4"><div class="empty-state"><i class="ti ti-bell-off"></i><p>No alerts found</p></div></td></tr>`;return;}
+    data.alerts.forEach(alert=>{
+      table.innerHTML+=`<tr>
+        <td><span class="cell-mono" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block">${alert._id}</span></td>
+        <td><div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill" style="width:${alert.riskScore||0}%;background:${scoreColor(alert.riskScore||0)}"></div></div><span class="score-num" style="color:${scoreColor(alert.riskScore||0)}">${alert.riskScore||0}</span></div></td>
+        <td><span class="badge ${levelClass(alert.riskLevel)}"><span class="badge-dot"></span>${alert.riskLevel||'LOW'}</span></td>
+        <td style="color:var(--text-3)">${new Date(alert.createdAt).toLocaleString()}</td>
+      </tr>`;
+    });
+  }catch(err){console.error(err)}
 }
+
+async function loadAuditLogs(){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch('http://localhost:5000/api/admin/audit-logs',{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    const table=document.getElementById('auditTable');table.innerHTML='';
+    if(!data.logs||!data.logs.length){table.innerHTML=`<tr><td colspan="5"><div class="empty-state"><i class="ti ti-list-off"></i><p>No logs found</p></div></td></tr>`;return;}
+    data.logs.forEach(log=>{
+      table.innerHTML+=`<tr>
+        <td><div style="display:flex;flex-direction:column;gap:1px"><span class="audit-user-name">${log.userId?.firstName||'System'}</span><span class="audit-user-email">${log.userId?.email||''}</span></div></td>
+        <td style="color:var(--text-1);font-weight:500">${log.action}</td>
+        <td><span class="badge b-neutral"><span class="badge-dot"></span>${log.result}</span></td>
+        <td><span class="cell-mono">${log.ipAddress||'&#8212;'}</span></td>
+        <td style="color:var(--text-3);font-size:12.5px">${new Date(log.createdAt).toLocaleString()}</td>
+      </tr>`;
+    });
+  }catch(err){console.error(err)}
+}
+
+async function loadAnalytics(){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch('http://localhost:5000/api/admin/analytics',{headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();
+    animateCount('highRiskCount',data.highRisk||0);
+    animateCount('mediumRiskCount',data.mediumRisk||0);
+    animateCount('lowRiskCount',data.lowRisk||0);
+    animateCount('frozenUsers',data.frozenUsers||0);
+    renderRiskChart(data.highRisk||0,data.mediumRisk||0,data.lowRisk||0);
+    renderDonut(data.highRisk||0,data.mediumRisk||0,data.lowRisk||0);
+  }catch(err){console.error(err)}
+}
+
+async function freezeUser(id){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch(`http://localhost:5000/api/admin/freeze-user/${id}`,{method:'PUT',headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();alert(data.message);loadUsers();
+  }catch(err){console.error(err)}
+}
+
+async function unfreezeUser(id){
+  try{
+    const token=localStorage.getItem('sb_token');
+    const res=await fetch(`http://localhost:5000/api/admin/unfreeze-user/${id}`,{method:'PUT',headers:{Authorization:`Bearer ${token}`}});
+    const data=await res.json();alert(data.message);loadUsers();
+  }catch(err){console.error(err)}
+}
+
+function logout(){localStorage.clear();window.location.href='../index.html'}
+
+const sectionMeta={
+  dashboard:{title:'Dashboard',crumb:'Overview'},
+  users:{title:'Users',crumb:'User Management'},
+  fraud:{title:'Fraud Monitoring',crumb:'Transaction Risks'},
+  alerts:{title:'Fraud Alerts',crumb:'Active Alerts'},
+  audit:{title:'Audit Logs',crumb:'Activity History'},
+};
+
 function showSection(section){
-
-    const sections = [
-        'dashboardSection',
-        'usersSection',
-        'fraudSection',
-        'alertsSection',
-        'auditSection'
-    ];
-
-    sections.forEach(id=>{
-        const el = document.getElementById(id);
-        if(el) el.style.display='none';
-    });
-
-    document.getElementById(
-        section + 'Section'
-    ).style.display='block';
+  ['dashboardSection','usersSection','fraudSection','alertsSection','auditSection'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  document.getElementById(section+'Section').style.display='block';
+  document.querySelectorAll('.admin-menu button').forEach(b=>b.classList.remove('active'));
+  const idx=['dashboard','users','fraud','alerts','audit'].indexOf(section);
+  const btns=document.querySelectorAll('.admin-menu button');
+  if(btns[idx])btns[idx].classList.add('active');
+  const m=sectionMeta[section]||{};
+  document.getElementById('topbarTitle').textContent=m.title||'';
+  document.getElementById('topbarCrumb').textContent=m.crumb||'';
 }
-const admin = JSON.parse(
-    localStorage.getItem('sb_user')
-);
 
+const admin=JSON.parse(localStorage.getItem('sb_user'));
 if(admin){
-
-    document.getElementById('adminInfo').innerHTML = `
-        👤 ${admin.firstName}
-        <br>
-        <small>${admin.email}</small>
-    `;
+  document.getElementById('adminInfo').innerHTML=`<div class="user-avatar" style="width:28px;height:28px;font-size:14px"><i class="ti ti-user"></i></div><div class="user-meta"><div class="user-name">${admin.firstName}</div><div class="user-email" style="font-size:11px">${admin.email}</div></div>`;
+  document.getElementById('sidebarUser').innerHTML=`<div class="user-avatar"><i class="ti ti-user"></i></div><div class="user-meta"><div class="user-name">${admin.firstName}</div><div class="user-email">${admin.email}</div></div>`;
 }
-loadUsers();
-loadTransactions();
-loadAlerts();
-loadAnalytics();
-loadAuditLogs();
+
+loadUsers();loadTransactions();loadAlerts();loadAnalytics();loadAuditLogs();
 showSection('dashboard');
+initSparklines();
 </script>
-
-
 </body>
 </html>
