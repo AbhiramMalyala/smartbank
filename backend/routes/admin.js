@@ -9,8 +9,16 @@ const Transaction = require('../models/Transaction');
 const FraudAlert = require('../models/FraudAlert');
 
 router.get('/users', protect, adminOnly, async (req, res) => {
-const users = await User.find().select('-password');
-res.json({ success: true, users });
+
+    const users = await User.find({
+        role: { $ne: 'admin' }
+    }).select('-password');
+
+    res.json({
+        success: true,
+        users
+    });
+
 });
 
 router.get('/transactions', protect, adminOnly, async (req, res) => {
