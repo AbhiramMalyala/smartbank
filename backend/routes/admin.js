@@ -23,6 +23,8 @@ router.get('/users', protect, adminOnly, async (req, res) => {
 
 router.get('/transactions', protect, adminOnly, async (req, res) => {
 const transactions = await Transaction.find()
+.populate('userId', 'firstName lastName email')
+.populate('counterpartyId', 'firstName lastName email')
 .sort({ createdAt: -1 })
 .limit(500);
 
