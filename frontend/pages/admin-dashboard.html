@@ -347,7 +347,7 @@ loadStats();
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Txn ID</th><th>Amount</th><th>Rule Score</th><th>ML Score</th><th>Risk Level</th><th>Prediction</th><th>Status</th></tr></thead>
+          <thead><tr><th>Sender</th><th>Receiver</th><th>Amount</th><th>Rule Score</th><th>ML Score</th><th>Risk Level</th><th>Prediction</th><th>Status</th></tr></thead>
           <tbody id="fraudTable"></tbody>
         </table>
       </div>
@@ -505,15 +505,66 @@ async function loadTransactions(){
       const level=(tx.fraudLevel||'LOW').toUpperCase();
       if(level==='HIGH')highCount++;
       const statusCls=tx.status==='blocked'?'b-blocked':'b-active';
-      table.innerHTML+=`<tr>
-        <td><span class="cell-mono">${tx.txnId}</span></td>
-        <td><span class="cell-amount">&#8377;${(tx.amount||0).toLocaleString()}</span></td>
-        <td><span style="font-weight:600;color:${scoreColor(tx.fraudScore||0)}">${tx.fraudScore||0}</span></td>
-        <td><span style="font-weight:600;color:${scoreColor(tx.mlFraudScore||0)}">${tx.mlFraudScore||0}</span></td>
-        <td><span class="badge ${levelClass(level)}"><span class="badge-dot"></span>${level}</span></td>
-        <td style="color:var(--text-2)">${tx.mlPrediction||'legitimate'}</td>
-        <td><span class="badge ${statusCls}"><span class="badge-dot"></span>${tx.status}</span></td>
-      </tr>`;
+      table.innerHTML += `
+<tr>
+
+<td>
+    <span class="cell-primary">
+        ${
+            tx.type === 'debit'
+            ? (tx.userId ? tx.userId.firstName : 'Unknown')
+            : (tx.counterpartyName || 'Unknown')
+        }
+    </span>
+</td>
+
+<td>
+    <span class="cell-primary">
+        ${
+            tx.type === 'debit'
+            ? (tx.counterpartyName || 'Unknown')
+            : (tx.userId ? tx.userId.firstName : 'Unknown')
+        }
+    </span>
+</td>
+
+<td>
+    <span class="cell-amount">
+        &#8377;${(tx.amount || 0).toLocaleString()}
+    </span>
+</td>
+
+<td>
+    <span style="font-weight:600;color:${scoreColor(tx.fraudScore || 0)}">
+        ${tx.fraudScore || 0}
+    </span>
+</td>
+
+<td>
+    <span style="font-weight:600;color:${scoreColor(tx.mlFraudScore || 0)}">
+        ${tx.mlFraudScore || 0}
+    </span>
+</td>
+
+<td>
+    <span class="badge ${levelClass(level)}">
+        <span class="badge-dot"></span>
+        ${level}
+    </span>
+</td>
+
+<td style="color:var(--text-2)">
+    ${tx.mlPrediction || 'legitimate'}
+</td>
+
+<td>
+    <span class="badge ${statusCls}">
+        <span class="badge-dot"></span>
+        ${tx.status}
+    </span>
+</td>
+
+</tr>`;
     });
     const badge=document.getElementById('fraudBadge');
     if(badge&&highCount>0){badge.textContent=highCount;badge.style.display='inline-flex';}
